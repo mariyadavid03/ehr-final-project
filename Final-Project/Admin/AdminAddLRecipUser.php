@@ -76,7 +76,7 @@
 	</div>
 
 	<?php
-	$logged_username = "jdone13";
+
 		if (isset($_POST["btnSubmit"])){
 			$name = $_POST["name"];
 			$staffid = $_POST["staffid"];
