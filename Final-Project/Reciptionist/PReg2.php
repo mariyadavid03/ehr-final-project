@@ -1,3 +1,9 @@
+<?php
+    session_start();
+    require_once ('../data/conn.php');
+	require_once('../data/methods.php');
+    ob_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,154 +22,147 @@
       <h2 class="text-white mb-0"><b>Patient Registration</b></h2>
     </div>
   </header>
-
-    
-       
         <br>
         <br>
         <br>
-        <form>
-           
-        <div class="row justify-content-center">
-                <div class="col-md-3 py-3" style="background-color:#D9D9D9; ">
-                <div class="row">
-                 <h4 class="mb-4 text-center"><u><b>Diagnosis</b></u></h4>
-                </div>
-                    <div class="form-group">
-                        <label for="patientNumber">Patient Health Number:</label>
-                        <input type="text" class="form-control" id="patientNumber" placeholder="Enter PHN" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="dateOfBirth">Date Of Birthday:</label>
-                        <input type="date" class="form-control" id="dateOfBirth" required>
-                    </div>
-                </div>
-
-
-
-
-    
-                <div class="col-md-4 py-3 " style=" background-color:#D9D9D9; margin-left:10px;">
-                <div class="row">
-                 <h4 class="mb-4 text-center"><u><b>Complication</b></u></h4>
-                </div>
-                <div class="d-flex">
-                <div>
-                <div class="row">
-                <label for="patientPicture"><U>Micro Vascular</U></label>
-                </div>
-
-                <div class="form-group">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="phoneCheckbox">
-                        <label class="form-check-label" for="phoneCheckbox">
-                           Neuropathy
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="phoneCheckbox">
-                        <label class="form-check-label" for="phoneCheckbox">
-                           Neuropathy
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="phoneCheckbox">
-                        <label class="form-check-label" for="phoneCheckbox">
-                           Neuropathy
-                        </label>
-                    </div>
-                    <br>
+        <form method="post">
+            <div class="row justify-content-center">
+                    <div class="col-md-3 py-3" style="background-color:#D9D9D9; ">
                     <div class="row">
-                <label for="patientPicture"><U>Macro Vascular</U></label>
-                
-                </div>
-                <div class="form-group">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="phoneCheckbox">
-                        <label class="form-check-label" for="phoneCheckbox">
-                           IHD
-                        </label>
+                    <h4 class="mb-4 text-center"><u><b>Diagnosis</b></u></h4>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="phoneCheckbox">
-                        <label class="form-check-label" for="phoneCheckbox">
-                           Stroke/TIA
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="phoneCheckbox">
-                        <label class="form-check-label" for="phoneCheckbox">
-                           Peripharal Vascular Dis
-                        </label>
-                    </div>                
-                </div>    
-            </div>    
-        </div>
+                        <div class="form-group">
+                            <label for="patientNumber">Diabetes Type:</label>
+                            <select class="form-control" name="dtype" id="" >
+                                <option value="Type 1">Type 1</option>
+                                <option value="Type 2">Type 2</option>
+                                <option value="Gestational">Gestational</option>
+                            </select>
 
-        <div style="margin-left: 10px;">
-                <div class="row">
-                <label for="patientPicture"><U>Foot</U></label>
-                </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="dateOfBirth">Diagnosed Date:</label>
+                            <input type="date" name="ddate" class="form-control" id="dateOfBirth" required>
+                        </div>
+                    </div>
 
-                <div class="form-group">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="phoneCheckbox">
-                        <label class="form-check-label" for="phoneCheckbox">
-                           Foot Ulcer/Callosity
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="phoneCheckbox">
-                        <label class="form-check-label" for="phoneCheckbox">
-                           Charcot's Arthropathy
-                        </label>
-                    </div>
-                    <br>
-                    <br>
+                    <div class="col-md-4 py-3 " style=" background-color:#D9D9D9; margin-left:10px;">
                     <div class="row">
-                <label for="patientPicture"><U>Core Morbidities</U></label>
-                
-                </div>
-                <div class="form-group">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="phoneCheckbox">
-                        <label class="form-check-label" for="phoneCheckbox">
-                           Hypertension
-                        </label>
+                    <h4 class="mb-4 text-center"><u><b>Complication</b></u></h4>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="phoneCheckbox">
-                        <label class="form-check-label" for="phoneCheckbox">
-                           Dyslipidaemia
-                        </label>
+                    <div class="d-flex">
+                    <div>
+                    <div class="row">
+                    <label for="patientPicture"><U>Micro Vascular</U></label>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="phoneCheckbox">
-                        <label class="form-check-label" for="phoneCheckbox">
-                          NAFLD
-                        </label>
-                    </div>     
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="phoneCheckbox">
-                        <label class="form-check-label" for="phoneCheckbox">
-                          Obesity(BMI>23)
-                        </label>
+
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input class="form-check-input" name="microVascular[]" type="checkbox" value="Neuropathy" id="phoneCheckbox">
+                            <label class="form-check-label" for="phoneCheckbox">
+                            Neuropathy
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" name="microVascular[]" type="checkbox" value="Nephropathy" id="phoneCheckbox">
+                            <label class="form-check-label" for="phoneCheckbox">
+                            Nephropathy
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" name="microVascular[]" type="checkbox" value="Retinopathy" id="phoneCheckbox">
+                            <label class="form-check-label" for="phoneCheckbox">
+                            Retinopathy
+                            </label>
+                        </div>
+                        <br>
+                        <div class="row">
+                    <label for="patientPicture"><U>Macro Vascular</U></label>
+                    
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="phoneCheckbox">
-                        <label class="form-check-label" for="phoneCheckbox">
-                          Smoking
-                        </label>
-                    </div>               
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input class="form-check-input" name="macroVascular[]" type="checkbox" value="IHD" id="phoneCheckbox">
+                            <label class="form-check-label" for="phoneCheckbox">
+                            IHD
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" name="macroVascular[]" type="checkbox" value="Stroke" id="phoneCheckbox">
+                            <label class="form-check-label" for="phoneCheckbox">
+                            Stroke/TIA
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" name="macroVascular[]" type="checkbox" value="Peripharal" id="phoneCheckbox">
+                            <label class="form-check-label" for="phoneCheckbox">
+                            Peripharal Vascular Dis
+                            </label>
+                        </div>                
+                    </div>    
                 </div>    
             </div>
-            </div>        
-        </div>
-            
 
+            <div style="margin-left: 10px;">
+                    <div class="row">
+                    <label for="patientPicture"><U>Foot</U></label>
+                    </div>
 
-
-        </form>
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input class="form-check-input" name="foot[]" type="checkbox" value="Ulcer" id="phoneCheckbox">
+                            <label class="form-check-label" for="phoneCheckbox">
+                            Foot Ulcer/Callosity
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" name="foot[]" type="checkbox" value="Arthropathy" id="phoneCheckbox">
+                            <label class="form-check-label" for="phoneCheckbox">
+                            Charcot's Arthropathy
+                            </label>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="row">
+                    <label for="patientPicture"><U>Core Morbidities</U></label>
+                    
+                    </div>
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input class="form-check-input" name="coreMorbidities[]" type="checkbox" value="Hypertension" id="phoneCheckbox">
+                            <label class="form-check-label" for="phoneCheckbox">
+                            Hypertension
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" name="coreMorbidities[]" type="checkbox" value="Dyslipidaemia" id="phoneCheckbox">
+                            <label class="form-check-label" for="phoneCheckbox">
+                            Dyslipidaemia
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" name="coreMorbidities[]" type="checkbox" value="NAFLD" id="phoneCheckbox">
+                            <label class="form-check-label" for="phoneCheckbox">
+                            NAFLD
+                            </label>
+                        </div>     
+                        <div class="form-check">
+                            <input class="form-check-input" name="coreMorbidities[]" type="checkbox" value="Obesity" id="phoneCheckbox">
+                            <label class="form-check-label" for="phoneCheckbox">
+                            Obesity(BMI>23)
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" name="coreMorbidities[]" type="checkbox" value="Smoking" id="phoneCheckbox">
+                            <label class="form-check-label" for="phoneCheckbox">
+                            Smoking
+                            </label>
+                        </div>               
+                    </div>    
+                </div>
+                </div>        
+            </div>
+        
         
     </div>
     <br>
@@ -177,95 +176,248 @@
                 <div class="d-flex">
                     <div class="form-group">
                         <label for="patientNumber">Reffered By</label>
-                        <input type="text" class="form-control" id="patientNumber" placeholder="Reffered By" required>
+                        <input type="text"  class="form-control" name="refferedBy" id="patientNumber" placeholder="Reffered By" required>
                     </div>
                     <div class="form-group" style="margin-left: 90px;">
                         <label for="dateOfBirth">Substance Use</label>
-                        <input type="text" class="form-control" id="patientNumber" placeholder="Substance Use" required>
+                        <input type="text" class="form-control" name="substanceUse" id="patientNumber" placeholder="Substance Use" required>
                     </div>
                     <div class="form-group" style="margin-left: 90px;">
                         <label for="dateOfBirth">Current Medication</label>
-                        <input type="text" class="form-control" id="patientNumber" placeholder="Current Medication" required>
+                        <input type="text" name="currentMedi" class="form-control" id="patientNumber" placeholder="Current Medication" required>
                     </div>
                 </div>
                 
                 <div class="d-flex" style="margin-top: 20px;">
                 <div class="d-flex">
-                    <div class="form-group">
-                        <label for="patientNumber">Post Medical History</label>
-                        <input type="text" class="form-control" id="patientNumber" placeholder="Post Medical History" required>
-                     </div>
-
-                     <div class="py-4" style="margin-left:3px">
-                        <button type="button" class="btn " style="border-radius: 50%;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
-                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
-                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
-                        </svg>
-                        </button>
-                        </div>
+                    <div class="form-group" id="postMedicalHistoryFields">
+                        <label for="patientNumber">Past Medical History</label>
+                        <input type="text" name="pastMedHistory[]" class="form-control mb-3" placeholder="Past Medical History" required>
+                    </div>
+                    <div class="py-4" style="margin-left:3px">
+                        <button type="button" style="border-radius:50%" class="btn btn-outline-secondary" onclick="addTextField('postMedicalHistoryFields')">+</button>
+                    </div>
                 </div>    
                 <div class="d-flex" style="margin-left:40px">
-                    <div class="form-group">
+                    <div class="form-group" id="allergiesFields">
                         <label for="patientNumber">Allergies</label>
-                        <input type="text" class="form-control" id="patientNumber" placeholder="Allergies" required>
-                     </div>
+                        <input type="text" name="allergies[]" class="form-control mb-3" placeholder="Allergies">
+                    </div>
 
                      <div class="py-4" style="margin-left:3px">
-                        <button type="button" class="btn " style="border-radius: 50%;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
-                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
-                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
-                        </svg>
-                        </button>
+                     <button type="button" style="border-radius:50%"  class="btn btn-outline-secondary" onclick="addTextField('allergiesFields')">+</button>
                         </div>
                 </div>
                 </div>    
 
-    </div>
-    </div>
-<br>
-<div class="row justify-content-center" style="margin-top: 10px;">
-    <div class="py-3" style="background-color:#D9D9D9; width: 804px; height:auto">
-    <div class="row">
-            <h4 class="mb-4 text-center"><u><b>Family And Social History</b></u></h4>
-    </div>
-    <div class="row d-flex">
+            </div>
+            </div>
+        <br>
+        <div class="row justify-content-center" style="margin-top: 10px;">
+            <div class="py-3" style="background-color:#D9D9D9; width: 804px; height:auto">
+            <div class="row">
+                    <h4 class="mb-4 text-center"><u><b>Family And Social History</b></u></h4>
+            </div>
+            <div class="row d-flex">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label for="patientNumber">Name</label>
-                        <input type="text" class="form-control" id="patientNumber" placeholder="Name" required>
+                        <label for="patientNumber">Family Member Name</label>
+                        <input type="text" name="fmname" class="form-control" id="patientNumber" placeholder="Name" required>
                     </div>
                     <div class="form-group">
                         <label for="dateOfBirth">Relationship</label>
-                        <input type="text" class="form-control" id="patientNumber" placeholder="Relationship" required>
+                        <input type="text" name="relate" class="form-control" id="patientNumber" placeholder="Relationship" required>
                     </div>
                     <div class="form-group">
-                        <label for="dateOfBirth">Diseases</label>
-                        <input type="text" class="form-control" id="patientNumber" placeholder="Diseases" required>
+                        <label for="dateOfBirth">Disease</label>
+                        <input type="text" name="disease" class="form-control" id="patientNumber" placeholder="Disease" required>
                     </div>
                 </div>
                 <div class="col-md-4" style="margin-left:30px;">
                     <div class="form-group">
                         <label for="patientNumber">Occupation</label>
-                        <input type="text" class="form-control" id="patientNumber" placeholder="Occupation" required>
+                        <input type="text" name="ocuupation" class="form-control" id="patientNumber" placeholder="Occupation" required>
                     </div>
                     <div class="form-group">
                         <label for="dateOfBirth">Education Level</label>
-                        <input type="text" class="form-control" id="patientNumber" placeholder="Education Level" required>
+                        <select class="form-control" style="color:black" id="educationLevel" name="educationLevel" required>
+                            <option value="None">None</option>
+                            <option value="Primary">Primary</option>
+                            <option value="Secondary">Secondary</option>
+                            <option value="Higher Secondary">Higher Secondary</option>
+                            <option value="Bachelor's Degree">Bachelor's Degree</option>
+                            <option value="Master's Degree">Master's Degree</option>
+                            <option value="PhD or higher">PhD or higher</option>
+                        </select>
                     </div>
                 </div>
             
                 </div>
                 </div>    
 
-    </div>
+        </div>
 
-    <div class="row justify-content-center text-center" style="margin-top: 10px;">
-    <div>
-    <button type="button" class="btn btn-primary">SAVE</button>
-    </div>
-    </div>
-    
+        <div class="row justify-content-center text-center" style="margin-top: 10px;">
+        <div>
+        <button type="submit" name="btnSave" class="btn btn-primary">SAVE</button>
+        </div>
+        </div>
+    </form>
+
+    <?php
+        if(isset($_POST["btnSave"])){
+            $dtype = $_POST["dtype"];
+            $ddate = $_POST["ddate"];
+
+            if(isset($_POST["foot"])) {
+                $foot  = $_POST["foot"];
+            } else {
+                $foot  = array();
+            }
+
+            if(isset($_POST["coreMorbidities"])) {
+                $coreMorb  = $_POST["coreMorbidities"];
+            } else {
+                $coreMorb  = array();
+            }
+            
+            if(isset($_POST["microVascular"])) {
+                $microVasc = $_POST["microVascular"];
+            } else {
+                $microVasc = array();
+            }
+
+            if(isset($_POST["macroVascular"])) {
+                $macroVasc = $_POST["macroVascular"];
+            } else {
+                $macroVasc = array();
+            }
+
+            $refferdBy = $_POST["refferedBy"];
+            $substance = $_POST["substanceUse"];
+            $currentMedi = $_POST["currentMedi"];
+
+
+            if(isset($_POST["pastMedHistory"])) {
+                $pastMedHistory = $_POST["pastMedHistory"];
+            } else {
+                $pastMedHistory = array();
+            }
+            if(isset($_POST["allergies"])) {
+                $allergies = $_POST["allergies"];
+            } else {
+                $allergies = array();
+            }
+
+            $familyMemName = $_POST["fmname"];
+            $relation = $_POST["relate"];
+            $disease = $_POST["disease"];
+            $ocuupation = $_POST["ocuupation"];
+            $eduLevel = $_POST["educationLevel"];
+            $patient_id = $_SESSION['patient_id'];
+
+            try{
+                $conn = conn::getConnection();
+                
+                //Diagnosis 
+
+                $diagnosisQuery = $conn->prepare("INSERT INTO `diagnosis`(`diabetes_type`, `date`, `patient_id`) 
+                                        VALUES (:dtype,:ddate,:pId)");
+                $diagnosisQuery->execute([':dtype'=> $dtype, ':ddate'=> $ddate, ':pId'=> $patient_id]);
+                $dId = $conn->lastInsertId();
+
+                if(!empty($microVasc)){
+                    foreach($microVasc as $complication){
+                        $compQuery = $conn->prepare("INSERT INTO `complication`(`complication`, `type`, `diagnosis_id`) 
+                                    VALUES (:comp,:compType,:dId)");
+                        $compQuery->execute([':comp'=> $complication, ':compType'=> 'Micro Vascular', ':dId'=> $dId]);
+                    }
+                }
+                if(!empty($macroVasc)){
+                    foreach($macroVasc as $complication){
+                        $compQuery = $conn->prepare("INSERT INTO `complication`(`complication`, `type`, `diagnosis_id`) 
+                                    VALUES (:comp,:compType,:dId)");
+                        $compQuery->execute([':comp'=> $complication, ':compType'=> 'Macro Vascular', ':dId'=> $dId]);
+                    }
+                }
+                if(!empty($foot)){
+                    foreach($foot as $complication){
+                        $compQuery = $conn->prepare("INSERT INTO `complication`(`complication`, `type`, `diagnosis_id`) 
+                                    VALUES (:comp,:compType,:dId)");
+                        $compQuery->execute([':comp'=> $complication, ':compType'=> 'Foot', ':dId'=> $dId]);
+                    } 
+                }
+                if(!empty($coreMorb)){
+                    foreach($coreMorb as $complication){
+                        $compQuery = $conn->prepare("INSERT INTO `complication`(`complication`, `type`, `diagnosis_id`) 
+                                    VALUES (:comp,:compType,:dId)");
+                        $compQuery->execute([':comp'=> $complication, ':compType'=> 'Core Morbidities', ':dId'=> $dId]);
+                    } 
+                }
+                 //History
+                $historyQuery = $conn->prepare("INSERT INTO `history`( `reffered_by`, `substance_use`, `medication_on`, `patient_id`) 
+                                        VALUES (:refferdBy,:substanceUse,:medOn,:pId)");
+                $historyQuery->execute([':refferdBy'=> $refferdBy,':substanceUse'=> $substance,':medOn'=> $currentMedi,':pId'=> $patient_id]);
+                $historyId = $conn->lastInsertId();
+                
+                //Past Medical Conditions
+                if(!empty($pastMedHistory)){
+                    foreach($pastMedHistory as $pastMed){
+                        $pastMedQuery = $conn->prepare("INSERT INTO `history_past_medical_history`(`history_id`, `past_medical_history`) 
+                        VALUES (:hId,:pastMId)");
+                        $pastMedQuery->execute([':hId'=> $historyId, ':pastMId'=> $pastMed]);
+                    }
+                }
+                //allergies
+                if(!empty($allergies)){
+                    foreach($allergies as $allergy){
+                        $allergyQuery = $conn->prepare("INSERT INTO `history_allergies`(`history_id`, `allergies`) 
+                                                VALUES (:hId,:allergy)");
+                        $allergyQuery->execute([':hId'=> $historyId, ':allergy'=> $allergy]);
+                    }
+                }
+
+                //family history
+                $fHistoryQuery = $conn->prepare("INSERT INTO `family_history`(`name`, `relationship`, `disease`, `history_id`) 
+                                        VALUES (:name, :relate, :dieases, :hId)");
+                $fHistoryQuery->execute([':name'=> $familyMemName, ':relate'=> $relation, ':dieases'=> $disease, ':hId'=> $historyId]);
+
+                //social history
+                $sHistoryQuery = $conn->prepare("INSERT INTO `social_history`( `occupation`, `edu_level`, `history_id`) 
+                                                VALUES (:occupation,:eduLevel,:hId)");
+                $sHistoryQuery->execute([':occupation'=> $ocuupation, ':eduLevel'=> $eduLevel, ':hId'=> $historyId]);
+
+                $_SESSION['patient_added_success'] = true;
+                echo '<script>
+                    setTimeout(function() {
+                        window.location.href = "ReciptionHome.php";
+                    }, 3000); // 3000 milliseconds delay (3 seconds)
+                </script>';
+                exit;
+
+            } catch(Exception $e) {
+                echo "Error: ".$e->getMessage();
+            }
+
+
+
+        }
+        ob_end_flush();
+    ?>
+
+
+        <!-- JavaScript -->
+    <script>
+        function addTextField(containerId) {
+            var container = document.getElementById(containerId);
+            var textField = document.createElement("input");
+            textField.type = "text";
+            textField.className = "form-control mb-3";
+            textField.placeholder = "Enter Text";
+            container.appendChild(textField);
+        }
+
+
+    </script>
 </body>
 </html>

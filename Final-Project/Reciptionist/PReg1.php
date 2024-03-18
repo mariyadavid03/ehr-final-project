@@ -2,6 +2,7 @@
     session_start();
     require_once ('../data/conn.php');
 	require_once('../data/methods.php');
+    ob_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,11 +12,21 @@
     <title>Patient Registration</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="stylesheet" href="../Css/Reciption P reg.css">
+
+    <style>
+        .fixed-top-alert {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+        }
+    </style>
 </head>
 <body>
 <header class="row py-3" style="background-color: dodgerblue;">
     <div class="col-1 d-flex align-items-center" style="margin-left: 20px;">
-      <a href="#" class="btn btn-danger" style="background-color: red;">Back</a>
+      <a href="ReciptionHome.php" class="btn btn-danger" style="background-color: red;">Back</a>
     </div>
     <div class="col text-center">
       <h2 class="text-white mb-0"><b>Patient Registration</b></h2>
@@ -128,6 +139,7 @@
 
         <?php
             if(isset($_POST['btnNext'])){
+
                 $phn = $_POST["phn"];
                 $nic = $_POST["nic"];
                 $fname = $_POST["fname"];
@@ -143,9 +155,13 @@
                 $econtactName = $_POST["econtactName"];
                 $econtactRelate = $_POST["econtactRelate"];
                 $econtactNumber = $_POST["econtactNumber"];
+                
                 if(isset($_FILES['ppicture'])){
                     $file_tmp = $_FILES['ppicture']['tmp_name'];
-                }
+                    $file_type = $_FILES['ppicture']['type'];
+        
+                    if ($file_type === 'image/jpeg' || $file_type === 'image/png') {
+                        $file_data = file_get_contents($file_tmp);
 
                 try{
                     $conn = conn::getConnection();
@@ -165,33 +181,43 @@
                         $query->execute([':phn' => $phn,':nic' => $nic,':fname' => $fname, ':lname' => $lname, ':nameInitials' => $nameInitials, ':dob'=> $dob,
                         ':houseNo' => $houseNo,':street' => $street,':city' => $city,':gender' => $gender,':contact' => $number,':email' => $email, ':econtactID' => $emergencyContactId, ':picture' => $file_data]);
                         
+                        $lastInsertedId = $conn->lastInsertId();
+                        $_SESSION['patient_id'] = $lastInsertedId;
+                        
                         } catch (Exception $e){
                             echo 'Erro occured during insertion:  ' .$e->getMessage();
                         }
-                    } else {
-                        try{
-                            $query = $conn->prepare("INSERT INTO `patient`(`phn`, `nic`, `first_name`, `last_name`, `name_with_intials`, `dob`, `house_no`, `street`, `city`, `gender`, `contact`, `email`,`emergency_contact_id`) 
-                            VALUES 
-                            (:phn,:nic,:fname, :lname, :nameInitials, :dob, :houseNo, :street, :city, :gender, :contact, :email, :econtactID)");
-                            
-                            $query->execute([':phn' => $phn,':nic' => $nic,':fname' => $fname, ':lname' => $lname, ':nameInitials' => $nameInitials, ':dob'=> $dob,
-                            ':houseNo' => $houseNo,':street' => $street,':city' => $city,':gender' => $gender,':contact' => $number,':email' => $email, ':econtactID' => $emergencyContactId]);
-                            
-                            } catch (Exception $e){
-                                echo 'Erro occured during insertion : ' .$e->getMessage();
-                            }
-                    }
+                        
+                    } 
+                    header("Location: PReg2.php");
+                    exit;
                         
                     
                 } catch(Exception $e){
                     echo 'Erro: ' .$e->getMessage();
                 }
+                    } else{
+                        echo '<div id="errorMessage" class="alert alert-danger fixed-top-alert" role="alert">
+                          Please upload only PNG or JPEG images.
+                      </div>';
+                    }
+                }
             }
+            ob_end_flush();
         ?>
         
     </div>
     <br>
     <br>
+
+    <script>
+        setTimeout(function(){
+            var errorMessage = document.getElementById('errorMessage');
+            if(errorMessage) {
+                errorMessage.style.display = 'none';
+            }
+        }, 3000);
+    </script>
            
 </body>
 </html>

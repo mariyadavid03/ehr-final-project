@@ -2,6 +2,10 @@
     session_start();
     require_once ('../data/conn.php');
 	require_once('../data/methods.php');
+    if(isset($_SESSION['patient_added_success']) && $_SESSION['patient_added_success'] == true) {
+        echo '<div class="alert alert-success" role="alert">Patient successfully added!</div>';
+        unset($_SESSION['patient_added_success']);
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -99,7 +103,7 @@
                     <input class="form-control border-end-0 border" name="patientIDInput" type="search" placeholder="Search Patient" id="example-search-input">
                     <span class="input-group-append">
                         <button class="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border ms-n5" 
-                                name="btnSearch" type="button">
+                                name="btnSearch" type="submit">
                             <i class="fa fa-search"></i>
                         </button>
                     </span>
@@ -114,14 +118,15 @@
             if (isset($_SESSION['logged_username'])) {
                 try{
                     if(isset($_POST['btnSearch'])){
-                        $searchItem = $_POST['patientIDInput'];
-                        $sql1 = "SELECT `phn`, `first_name`, `last_name`, `contact` FROM `patient` WHERE `phn` LIKE :searchTerm OR `first_name` LIKE :searchTerm OR `last_name` LIKE :searchTerm";
+                        $searchTerm = $_POST['patientIDInput'];
+                        $sql1 = "SELECT  `patient_id` ,`phn`, `first_name`, `last_name`, `contact` FROM `patient` WHERE `phn` LIKE :searchTerm OR `first_name` LIKE :searchTerm OR `last_name` LIKE :searchTerm";
                         $query1 = $conn->prepare($sql1);
+                        
                         $query1->execute([':searchTerm' => "%$searchTerm%"]);
                         $patients = $query1->fetchAll(PDO::FETCH_ASSOC);
                     
                     } else {
-                        $sql1 = "SELECT `phn`, `first_name`, `last_name`, `contact` FROM `patient`";
+                        $sql1 = "SELECT `patient_id`, `phn`, `first_name`, `last_name`, `contact` FROM `patient`";
                         $query1 = $conn->prepare($sql1);
                         $query1->execute();
                         $patients = $query1->fetchAll(PDO::FETCH_ASSOC);
@@ -157,7 +162,7 @@
                                         <td>
                                             <?php echo $patient['contact']; ?>
                                         </td>
-                                        <td><button type="button" class="btn btn-primary btn-sm">View</button></td>
+                                        <td><button type="button" name="btnView" class="btn btn-primary btn-sm" onclick="viewPatient('<?php echo $patient['patient_id']; ?>')">View</button></td>
                                     </tr>
                                     <?php endforeach; ?>
                                 </tbody>
@@ -186,7 +191,11 @@
         ?>
 
 
-
+    <script>
+        function viewPatient(patientID) {
+        window.location.href = 'RecipPatientDetailsView.php?patientID=' + patientID;
+    }
+    </script>
 
 
 
