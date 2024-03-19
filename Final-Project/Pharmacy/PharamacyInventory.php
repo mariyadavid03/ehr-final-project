@@ -80,15 +80,15 @@
                                <thead>
                                <th>ID</th>
                                <th>Name</th>
-                               <th>Qty</th>
-                               <th>Exp</th>
+                               <th>MFD</th>
+                               <th>EXP</th>
                                <th>Action</th>
                                </thead>
                                 <tbody>
                                     <tr>
                                         <td>01</td>
                                         <td>Penadol</td>
-                                        <td>12</td>
+                                        <td>01/01/2023</td>
                                         <td>01/01/2024</td>
                                         <td>
                                             <button type="button" class="btn btn-primary btn-sm">Edit</button>
@@ -98,7 +98,7 @@
                                     <tr>
                                         <td>01</td>
                                         <td>Penadol</td>
-                                        <td>12</td>
+                                        <td>01/01/2023</td>
                                         <td>01/01/2024</td>
                                         <td>
                                             <button type="button" class="btn btn-primary btn-sm">Edit</button>
@@ -108,7 +108,7 @@
                                     <tr>
                                         <td>01</td>
                                         <td>Penadol</td>
-                                        <td>12</td>
+                                        <td>01/01/2023</td>
                                         <td>01/01/2024</td>
                                         <td>
                                             <button type="button" class="btn btn-primary btn-sm">Edit</button>

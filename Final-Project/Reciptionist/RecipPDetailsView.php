@@ -7,9 +7,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="stylesheet" href="../Css/Reciption P reg.css">
 </head>
-
-
-
 <body>
 <header class="row py-3" style="background-color: dodgerblue;">
     <div class="col-1 d-flex align-items-center" style="margin-left: 20px;">
@@ -19,7 +16,6 @@
       <h2 class="text-white mb-0"><b>Patient Detail</b></h2>
     </div>
   </header>
-
   <br>
   <br>
   <br>
@@ -45,9 +41,7 @@
         <h6><B>Date Of Birthday:3/16/2024</B></h6>
         <h6><B>Gender:Male</B></h6>
   </div>
-
       </div>
-
   </div>
   <div class="col-md-6 py-3 mx-2 " style="background-color:#efefef; border-radius:16px;">
       <div class="row">
@@ -75,9 +69,7 @@
         <h6><B>Phone Number:</B></h6>         
         </div>
       </div>
-
   </div>
-
   </Div>
   <br>
   
@@ -96,7 +88,6 @@
         <h6><B>Diagnosis Date:</B></h6>
   </div>
       </div>
-
   </div>
   </Div>
   <br>

@@ -1,3 +1,8 @@
+<?php
+    session_start();
+    require_once ('../data/conn.php');
+	require_once('../data/methods.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,17 +33,56 @@
 </head>
 
 <body id="body-pd"> 
+
+<?php
+
+    if (isset($_SESSION['logged_username'])) {
+        $username = $_SESSION['logged_username'];
+        $user_id = $_SESSION['logged_id'];
+
+        try{
+            $conn = conn::getConnection();
+            $sql = "SELECT `name`,`staff_id` FROM `receptionist` WHERE `user_id` = :user_id";
+            $query = $conn->prepare($sql);
+            $query->execute([':user_id' => $user_id]);
+            $user= $query->fetch(PDO::FETCH_ASSOC);
+
+            if($user){
+                $staff_id = $user['staff_id'];
+                $name = $user['name'];
+                $_SESSION['logged_name'] = $name;
+            }
+            else {
+                echo 'no entry found';
+            }
+            
+        } catch (Exception $e){
+            echo 'Error connecting to database: ' . $e->getMessage();
+            exit;
+        }
+        
+
+    } 
+    else{
+        echo '<p>You are not logged in.</p>';
+    }
+?>
 <header class="header" id="header">
     <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
     <a href="#"  id="open-modal">
-        <div class="header_img"> <img src="https://i.imgur.com/hczKIze.jpg" alt=""> </div>
+        <div class="header_img"> <img src="https://assets-global.website-files.com/65c34b372e0d029b28e1caee/65c38deedb3d098d178e7053_Human-centric%20approach-p-500.png" alt=""> </div>
     </a>
 </header>
     <div class="l-navbar" id="nav-bar">
         <nav class="nav">
             <div>
-                <div class="nav_list"> <a href="#" class="nav_link active"> <i class='bx bx-grid-alt nav_icon'></i> <span class="nav_name">Home</span> </a> <a href="#" class="nav_link"> <i class='bx bx-user nav_icon'></i> <span class="nav_name">Register</span> </a> <a href="#" class="nav_link"> <i class='bx bx-message-square-detail nav_icon'></i> <span class="nav_name">Messages</span> </a> <a href="#" class="nav_link"></div>
-            </div> <a href="#" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">SignOut</span> </a>
+                <div class="nav_list"> 
+                    <a href="ReciptionHome.php" class="nav_link active"> <i class='bx bx-grid-alt nav_icon'></i> <span class="nav_name">Home</span> </a> 
+                    <a href="PReg1.php" class="nav_link"> <i class='bx bx-user nav_icon'></i> <span class="nav_name">Register</span> </a> 
+                    <a href="ChatUI.php" class="nav_link"> <i class='bx bx-message-square-detail nav_icon'></i> <span class="nav_name">Messages</span> </a> 
+
+                </div>
+            </div> <a href="RecipLogin.php" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">SignOut</span> </a>
         </nav>
     </div>
     <!--Container Main start-->
@@ -50,83 +94,75 @@
    
         <div class="row mt-5">
         <div class="col-md-5 mx-auto">
-            <div class="input-group">
-                <input class="form-control border-end-0 border" type="search" value="Search Patient" id="example-search-input">
-                <span class="input-group-append">
-                    <button class="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border ms-n5" type="button">
-                        <i class="fa fa-search"></i>
-                    </button>
-                </span>
-            </div>
+            <form method="post">
+                <div class="input-group">
+                    <input class="form-control border-end-0 border" name="patientIDInput" type="search" placeholder="Search Patient" id="example-search-input">
+                    <span class="input-group-append">
+                        <button class="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border ms-n5" 
+                                name="btnSearch" type="button">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </form>
         </div>
         <br>
         <br>
         <br>
         <br>
+        <?php
+            if (isset($_SESSION['logged_username'])) {
+                try{
+                    if(isset($_POST['btnSearch'])){
+                        $searchItem = $_POST['patientIDInput'];
+                        $sql1 = "SELECT `phn`, `first_name`, `last_name`, `contact` FROM `patient` WHERE `phn` LIKE :searchTerm OR `first_name` LIKE :searchTerm OR `last_name` LIKE :searchTerm";
+                        $query1 = $conn->prepare($sql1);
+                        $query1->execute([':searchTerm' => "%$searchTerm%"]);
+                        $patients = $query1->fetchAll(PDO::FETCH_ASSOC);
+                    
+                    } else {
+                        $sql1 = "SELECT `phn`, `first_name`, `last_name`, `contact` FROM `patient`";
+                        $query1 = $conn->prepare($sql1);
+                        $query1->execute();
+                        $patients = $query1->fetchAll(PDO::FETCH_ASSOC);
+                    }
+
+                    if($patients){
+
+
+
+        ?>
         <div class="container">
                 <div class="row">
-                    
-                    
                     <div class="col-md-12">
-                    <h4>Patient List List</h4>
-                    <div class="table-responsive">
-            
-                            
+                    <h4>Patient List</h4>
+                    <div class="table-responsive">  
                           <table id="mytable" class="table table-bordred table-striped">
-                               
                                <thead>
-                               <th>ID</th>
-                               <th>Name</th>
-                               <th>Tel No</th>
-                               <th>Action</th>
+                                    <th>PHN</th>
+                                    <th>Name</th>
+                                    <th>Contact Number</th>
+                                    <th>Action</th>
                                </thead>
-                <tbody>
-                
-                <tr>
-              
-                <td>01</td>
-                <td>Samiru Geethmal</td>
-                <td>568</td>
-                <td><button type="button" class="btn btn-primary btn-sm">View</button></td>
-                </tr>
-                
-                <tr>
-              
-              <td>01</td>
-              <td>Samiru Geethmal</td>
-              <td>568</td>
-              <td><button type="button" class="btn btn-primary btn-sm">View</button></td>
-              </tr>
-                
-                
-              <tr>
-              
-                <td>01</td>
-                <td>Samiru Geethmal</td>
-                <td>568</td>
-                <td><button type="button" class="btn btn-primary btn-sm">View</button></td>
-                </tr>
-                
-                <tr>
-              
-              <td>01</td>
-              <td>Samiru Geethmal</td>
-              <td>568</td>
-              <td><button type="button" class="btn btn-primary btn-sm">View</button></td>
-              </tr>
-                
-              <tr>
-              
-                <td>01</td>
-                <td>Samiru Geethmal</td>
-                <td>568</td>
-                <td><button type="button" class="btn btn-primary btn-sm">View</button></td>
-                </tr>               
-                </tbody>
+                               
+                                <tbody>
+                                    <?php foreach ($patients as $patient) : ?>
+                                    <tr>
+                                        <td>
+                                            <?php echo $patient['phn']; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $patient['first_name'] . " " . $patient['last_name']; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $patient['contact']; ?>
+                                        </td>
+                                        <td><button type="button" class="btn btn-primary btn-sm">View</button></td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
                     
-            </table>
-
-                            
+                            </table>   
                         </div>
                         
                     </div>
@@ -134,7 +170,20 @@
             </div>
     </div>
 
+    <?php
+            } else {
+                        echo "No patients found";
+                    }
+                } catch(Exception $e){
+                    echo "ERROR: ".$e->getMessage();
+                }
 
+            } else {
+                echo '<p>You are not logged in.</p>';
+            }
+
+
+        ?>
 
 
 
@@ -154,13 +203,13 @@
 
                     <h1 class="modal__title">Account Details</h1>
 
-                    <img src="../Images/images/pngwing.com.png" class="Profilepicture" srcset="">
+                    <img src="../Images/images/Lovepik_com-450074748-reception desk vector in modern style.png" class="Profilepicture" srcset="">
                     <br>
                     <br>
-                    <h5 class="details"><B>Name:</B> <span>Pethum</span></h5>
-                    <h5 class="details"><B>Username:</B> <span>Pethum</span></h5>
-                    <h5 class="details"><B>ID:</B><span>Pethum</span></h5>
-
+                    <h5 class="details"><B>Staff ID:</B><span> <?php echo $staff_id; ?> </span></h5>
+                    <h5 class="details"><B>Name:</B> <span> <?php echo $name; ?> </span></h5>
+                    <h5 class="details"><B>Username:</B> <span> <?php echo $username; ?> </span></h5>
+                    
                 </div>
             </div>
     <!--Modal end-->
@@ -176,5 +225,6 @@
     
 
     </div> 
+    
 </body>
 </html>

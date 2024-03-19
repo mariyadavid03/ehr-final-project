@@ -1,6 +1,9 @@
 <?php
+  session_start();
 	require_once ('../data/conn.php');
 	require_once('../data/methods.php');
+  $_SESSION = array();
+  session_destroy();
 ?>
 
 <!DOCTYPE html>
@@ -14,7 +17,7 @@
         <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.3/components/logins/login-3/assets/css/login-3.css">
 <link rel="stylesheet" href="../Css/Reciption.Css">        
-<title>Reciption Login</title>
+<title>Reception Login</title>
 </head>
 <body>
     <!-- Login 3 - Bootstrap Brain Component -->
@@ -23,7 +26,7 @@
     <div class="row">
       <div class="col-12 col-md-6 bsb-tpl-bg-platinum">
         <div class="d-flex flex-column justify-content-between h-100 p-3 p-md-4 p-xl-5">
-          <h1 class="m-0 text-center"><B>Reciption</B></h1>
+          <h1 class="m-0 text-center"><B>Reception</B></h1>
           <img class="Reciption" loading="lazy" src="../Images/images/10173114_8427-removebg-preview.png" width="100%" height="Auto" alt="Reciption Logo">
         </div>
       </div>
@@ -53,11 +56,7 @@
                   <button class="btn bsb-btn-xl btn-primary" name="btnLogin" type="submit"><B>LOGIN</B></button>
                 </div>
               </div>
-              <div class="col-12">
-                <div class="d-grid">
-                  <button class="btn bsb-btn-xl btn-danger" name= "btnBack" type="submit"><B>BACK</B></button>
-                </div>
-              </div>
+    
             </div>
           </form>
 
@@ -68,28 +67,32 @@
 
               try {
                 $conn = conn::getConnection();
-                $query = $conn->prepare("SELECT * FROM user WHERE username = :username");
+                $sql = "SELECT user_id, username, password, role FROM user WHERE username = :username";
+                $query = $conn->prepare($sql);
+        
                 $query->execute([':username' => $username]);
+
                 $user = $query->fetch(PDO::FETCH_ASSOC);
 
-                if($user){
-                  if (password_verify($password, $user['password'])){
+                if ((($user && password_verify($password, $user['password'])) || ($user && $password === $user['password'])) 
+                && $user['role'] === 'receptionist') {
                     session_start();
                     $_SESSION['logged_id'] = $user['user_id'];
                     $_SESSION['logged_username'] = $username;
                     $_SESSION['logged_role'] = $user['role']; 
+
+                    /*echo "ID: ". $_SESSION['logged_id'];
+                    echo "Usernmae: ".$_SESSION['logged_username'];
+                    echo "role: ".$_SESSION['logged_role'] ;*/
 
                     header("Location: ReciptionHome.php");
                     exit;
                   } else{
                     echo 'Invalid username or password';
                   }
-                }
-
-
-              } catch (Exception $e) {
-                echo 'Error connecting to database: ' . $e->getMessage();
-                exit;
+                } catch (Exception $e) {
+                  echo 'Error connecting to database: ' . $e->getMessage();
+                  exit;
               }
 
             }

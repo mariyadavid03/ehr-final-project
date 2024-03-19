@@ -1,3 +1,8 @@
+<?php
+    session_start();
+    require_once ('../data/conn.php');
+	require_once('../data/methods.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,27 +27,27 @@
         <br>
         <br>
         <br>
-        <form>
+        <form method="post" enctype="multipart/form-data">
            
         <div class="row justify-content-center">
                 <div class="col-md-4 py-3" style="background-color:#D9D9D9; ">
                 <h4 class="mb-4 txt-center"><u><b>Personal Details</b></u></h4>
-                    <div class="form-group">
+                <div class="form-group">
                         <label for="patientNumber">Patient Health Number:</label>
-                        <input type="text" class="form-control" id="patientNumber" placeholder="Enter PHN" required>
+                        <input type="text" class="form-control" name="phn" maxlength="11" id="patientNumber" placeholder="Enter PHN" required>
                     </div>
                     <div class="form-group">
                         <label for="nic">NIC:</label>
-                        <input type="text" class="form-control" id="nic" placeholder="Enter NIC" required>
+                        <input type="text" class="form-control" maxlength="12" name="nic" id="nic" placeholder="Enter NIC" required>
                     </div>
                     <div class="form-group">
                         <label for="firstName">Name:</label>
                         <div class="row">
                             <div class="col-md-6">
-                                <input type="text" class="form-control" id="firstName" placeholder="First Name" required>
+                                <input type="text" class="form-control" name="fname" id="firstName" placeholder="First Name" required>
                             </div>
                             <div class="col-md-6">
-                                <input type="text" class="form-control" id="lastName" placeholder="Last Name" required>
+                                <input type="text" class="form-control" name="lname" id="lastName" placeholder="Last Name" required>
                             </div>
                         </div>
                     </div>
@@ -50,17 +55,17 @@
                         <label for="firstName">Name With Initial:</label>
                         <div class="row">
                             <div class="col-md-6">
-                                <input type="text" class="form-control" id="firstName" placeholder="First Name" required>
+                                <input type="text" class="form-control" name="nameInitials" id="firstName" placeholder="First Name" required>
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="dateOfBirth">Date Of Birthday:</label>
-                        <input type="date" class="form-control" id="dateOfBirth" required>
+                        <input type="date" class="form-control" name="dob" id="dateOfBirth" required>
                     </div>
                     <div class="form-group">
                         <label for="gender">Gender:</label>
-                        <select class="form-control" id="gender" required>
+                        <select class="form-control" id="gender" name="gender" required>
                             <option value="">Select Gender</option>
                             <option value="male">Male</option>
                             <option value="female">Female</option>
@@ -68,7 +73,7 @@
                     </div>
                     <div class="form-group">
                         <label for="patientPicture">Patient Picture:</label>
-                        <input type="file" class="form-control" id="patientPicture">
+                        <input type="file" name="ppicture" class="form-control" id="patientPicture" required>
                     </div>
                 </div>
 
@@ -77,48 +82,112 @@
                 <div class="row">
                 <label for="patientPicture">Address</label>
                             <div class="col-md-6">
-                                <input type="text" class="form-control" id="Housenumber" placeholder="House Number" required>
+                                <input type="text" class="form-control" name="houseNo" id="Housenumber" placeholder="House Number" required>
                             </div>
                             <div class="col-md-6">
-                                <input type="text" class="form-control" id="Street" placeholder="Street" required>
+                                <input type="text" class="form-control" name="street" id="Street" placeholder="Street" required>
                             </div>
                             <div class="col-md-6">
-                                <input type="text" class="form-control" id="City" placeholder="City" required>
+                                <input type="text" class="form-control" name="city" id="City" placeholder="City" required>
                             </div>
                         </div>
                     <div class="form-group">
                         <label for="phoneNumber">Phone Number:</label>
-                        <input type="tel" class="form-control" id="phoneNumber" placeholder="Enter Phone Number" required>
+                        <input type="tel" maxlength="10" class="form-control" name="number" id="phoneNumber" placeholder="Enter Phone Number" required>
                     </div>
                     <div class="form-group">
                         <label for="email">Email:</label>
-                        <input type="email" class="form-control" id="email" placeholder="Enter Email" required>
+                        <input type="email" class="form-control" name="email" id="email" placeholder="Enter Email" required>
                     </div>
                     <br>
                  
-                    <h4 class="mb-4 txt-center"><u><b>Personal Details</b></u></h4>
+                    <h4 class="mb-4 txt-center"><u><b>Emergency Contact Details</b></u></h4>
                     <div class="form-group">
                         <label for="emergencyContactName">Name:</label>
-                        <input type="text" class="form-control" id="lastName" placeholder="Enter Name" required>
+                        <input type="text" class="form-control" id="lastName" name="econtactName" placeholder="Enter Name" required>
                     </div>
                     <div class="form-group">
                         <label for="emergencyContactName">Relationsip:</label>
-                        <input type="text" class="form-control" id="lastName" placeholder="Enter Name" required>
+                        <input type="text" class="form-control" id="lastName" name="econtactRelate" placeholder="Enter Name" required>
                     </div>
                     <div class="form-group">
                         <label for="emergencyContactName">Phone Number:</label>
-                        <input type="tel" class="form-control" id="lastName" placeholder="Enter Name" required>
+                        <input type="tel" maxlength="10" class="form-control" id="lastName" name="econtactNumber" placeholder="Enter Name" required>
                     </div>
 
-                    
-                </div>
-
-                
+             </div>
+    
             </div>
             <div class="containercol-md-6  " style="margin-left: 874px; margin-top:9px;">
-            <a href="../Reciptionist/PReg2.php" class="btn btn-secondary">NEXT</a>  
+            <button type="submit" name="btnNext" class="btn btn-secondary">
+            NEXT
+            </button>
+            
             </div>
-        </form>
+        </form>
+
+        <?php
+            if(isset($_POST['btnNext'])){
+                $phn = $_POST["phn"];
+                $nic = $_POST["nic"];
+                $fname = $_POST["fname"];
+                $lname = $_POST["lname"];
+                $nameInitials = $_POST["nameInitials"];
+                $dob = $_POST["dob"];
+                $gender = $_POST["gender"];
+                $houseNo = $_POST["houseNo"];
+                $street = $_POST["street"];
+                $city = $_POST["city"];
+                $number = $_POST["number"];
+                $email = $_POST["email"];
+                $econtactName = $_POST["econtactName"];
+                $econtactRelate = $_POST["econtactRelate"];
+                $econtactNumber = $_POST["econtactNumber"];
+                if(isset($_FILES['ppicture'])){
+                    $file_tmp = $_FILES['ppicture']['tmp_name'];
+                }
+
+                try{
+                    $conn = conn::getConnection();
+                    $query1 = $conn->prepare("INSERT INTO `emergency_contact`(`name`, `relationship`, `contact`) 
+                    VALUES (:name,:relate, :contact)");
+                    $query1->execute([':name' => $econtactName, ':relate' => $econtactRelate, ':contact' => $econtactNumber]);               
+                    $emergencyContactId = $conn->lastInsertId();
+
+                    if($file_tmp){
+                        $file_data = file_get_contents($file_tmp);
+
+                        try{
+                        $query = $conn->prepare("INSERT INTO `patient`(`phn`, `nic`, `first_name`, `last_name`, `name_with_intials`, `dob`, `house_no`, `street`, `city`, `gender`, `contact`, `email`,`emergency_contact_id`, `picture`) 
+                        VALUES 
+                        (:phn,:nic,:fname, :lname, :nameInitials, :dob, :houseNo, :street, :city, :gender, :contact, :email, :econtactID, :picture)");
+                        
+                        $query->execute([':phn' => $phn,':nic' => $nic,':fname' => $fname, ':lname' => $lname, ':nameInitials' => $nameInitials, ':dob'=> $dob,
+                        ':houseNo' => $houseNo,':street' => $street,':city' => $city,':gender' => $gender,':contact' => $number,':email' => $email, ':econtactID' => $emergencyContactId, ':picture' => $file_data]);
+                        
+                        } catch (Exception $e){
+                            echo 'Erro occured during insertion:  ' .$e->getMessage();
+                        }
+                    } else {
+                        try{
+                            $query = $conn->prepare("INSERT INTO `patient`(`phn`, `nic`, `first_name`, `last_name`, `name_with_intials`, `dob`, `house_no`, `street`, `city`, `gender`, `contact`, `email`,`emergency_contact_id`) 
+                            VALUES 
+                            (:phn,:nic,:fname, :lname, :nameInitials, :dob, :houseNo, :street, :city, :gender, :contact, :email, :econtactID)");
+                            
+                            $query->execute([':phn' => $phn,':nic' => $nic,':fname' => $fname, ':lname' => $lname, ':nameInitials' => $nameInitials, ':dob'=> $dob,
+                            ':houseNo' => $houseNo,':street' => $street,':city' => $city,':gender' => $gender,':contact' => $number,':email' => $email, ':econtactID' => $emergencyContactId]);
+                            
+                            } catch (Exception $e){
+                                echo 'Erro occured during insertion : ' .$e->getMessage();
+                            }
+                    }
+                        
+                    
+                } catch(Exception $e){
+                    echo 'Erro: ' .$e->getMessage();
+                }
+            }
+        ?>
         
     </div>
     <br>
