@@ -85,7 +85,7 @@ img{
 
 .modal__container{
   position: absolute;
-  top:  -100px;
+  top:  -390px;
   left: 0;
   background-color: hsla(var(--hue), 0%, 0%, );
   width: 100%;
@@ -193,4 +193,16 @@ img{
   .modal__img{
     width: 170px;
   }
+}
+
+.container {
+  margin-left: 5rem;
+  margin-right: 1rem;
+}
+
+
+
+.col-md-12{
+  overflow: hidden;
+  overflow-y: scroll;
 }
