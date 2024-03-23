@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Patient Home</title>
+    <title>Home</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <!--=============== BOXICONS ===============-->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
-
+  <link rel="icon" type="imag/jpg" href="../Images/Icons/Dieabatecare.png">
 <!--=============== CSS ===============-->
 <link rel="stylesheet" href="../Css/Modalpopup.css">
 <link rel="stylesheet" href="../Css/ReciptionHome.css">
@@ -170,11 +170,11 @@
                         <div class="d-flex justify-content-center">
 
                             <div class="py-2 d-flex align-items-center">
-                            <img src="../Images/Icons/ink-level_1008595.png" style="width:40px ;height:40px">
+                            <img src="../Images/Icons/invoice_2709484 (1).png" style="width:40px ;height:40px">
                             </div>
 
                             <div class="py-2 mx-3 d-flex align-items-center">
-                            <h4><b>Health</b></h4>
+                            <h4><b>Prescreption</b></h4>
                             </div>
 
                         </div>
@@ -201,7 +201,7 @@
                             </div>
 
                             <div class="py-2 mx-3 d-flex align-items-center">
-                            <h4><b>Dieatary Plan</b></h4>
+                            <h4><b>Lifestyle Plan</b></h4>
                             </div>
 
                         </div>
