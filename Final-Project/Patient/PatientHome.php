@@ -45,7 +45,43 @@
         </nav>
     </div>
     <!--Container Main start-->
-   
+         <!--Prescreption View Modal start-->   
+         <div class="modal__container" id="modal-container">
+       <div class="modal__content" style="width: 100%; max-width: 425px;" id="prescriptionmodal">
+                    <div class="modal__close close-modal" title="Close">
+                        <i class='bx bx-x'></i>
+                    </div>
+
+                    <div class="row">
+                    <div class="row py-4  text-center">
+                <H5 style="color: black;"><B>Vital Sign</B></H5>
+                <br>
+                <div class="row d-flex " style="text-align: left;">
+                    <div class="col mx-4">
+                    <H6 style="color: black;"><img src="../Images/Icons/glucosemeter_4333055.png"><b>Glucose</b></H6>
+                    <H6 style="color: black;"><img src="../Images/Icons/glucometer_8852600.png"><b>BP Diastolic</b></H6>
+                    <H6 style="color: black;"><img src="../Images/Icons/heartrate.png"><b>Heart Rate</b></H6>
+                    <H6 style="color: black;"><img src="../Images/Icons/glucometer_8852600.png"><b>BP Systolic</b></H6>
+                    </div>
+                    <div class="col" style="text-align: left; margin-left:-30px">
+                    <H6>Glucose Level</H6>
+                    <H6 style="margin-top: 14px;">Glucose Level</H6>
+                    <H6 Style="margin-top: 14px;">Glucose Level</H6>
+                    <H6 Style="margin-top: 14px;">Glucose Level</H6>
+                    </div>
+                </div>
+            </div>
+                  </div>
+                </div>
+            </div>
+
+
+
+
+
+      
+
+    <!--Modal end-->
         
     <div class="container">
     <div class="row" style="margin-left: 11px;">
@@ -54,7 +90,8 @@
     <!--first row-->
         <div class="row">
             <div class="col-md-4 mx-4 d-flex "style="background-color: white; border-radius:18px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
-                <div class="col-md-8 py-4 px-4 text-center ">
+              
+            <div class="col-md-8 py-4 px-4 text-center ">
                     <img src="../Images/images/patient.jpg" alt="" style="border-radius: 50%; width:100%">
                     <div style="text-align: left;">
                     <h6 style="margin-left: 20px; color:black;margin-top: 5px"><b>Pethum Shyam</b></h6>  
@@ -90,7 +127,8 @@
                         </div>
 
                     </div>  
-                </div>
+                
+            </div>
             </div>
             <br>
             <div class="col-md-6 mx-4"style="background-color: white; border-radius:18px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
@@ -210,7 +248,7 @@
                     </div>
 
                     <div class="col-md-6 " id="functions">
-                    <a href="your-link-here">  
+                    <a href="#" id="open-modal">  
                         <div class="col-md-12 mx-4" style="background-color: white; border: 1px solid #41A5EE; border-radius:18px;">
                         <div class="d-flex justify-content-center">
 
