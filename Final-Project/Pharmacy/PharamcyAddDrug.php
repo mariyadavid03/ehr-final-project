@@ -1,3 +1,9 @@
+<?php
+  session_start();
+  require_once ('../data/conn.php');
+  require_once('../data/methods.php');
+  ob_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,20 +37,18 @@
     <header class="header" id="header">
         <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
         <a href="#"  id="open-modal">
-        <div class="header_img"> <img src="https://i.imgur.com/hczKIze.jpg" alt=""> </div>
+        
         </a>
     </header>
     <div class="l-navbar" id="nav-bar">
-        <nav class="nav">
+    <nav class="nav">
             <div>
                 <div class="nav_list"> 
-                    <a href="#" class="nav_link active"> <i class='bx bx-grid-alt nav_icon'></i> <span class="nav_name">Home</span> </a> 
-                    <a href="#" class="nav_link"> <i class='bx bx-user nav_icon'></i> <span class="nav_name">Inventory</span> </a> 
-                    <a href="#" class="nav_link"> <i class='bx bx-message-square-detail nav_icon'></i> <span class="nav_name">Add Drugs</span> </a> 
-                    <a href="#" class="nav_link"><i class= 'bx bx-'></i> <span class="nav_name">Inbox</span>
+                    <a href="PharamacyHome.php" class="nav_link active"> <i class='bx bx-grid-alt nav_icon'></i> <span class="nav_name">Home</span> </a> 
+                    <a href="PharamacyInventory.php" class="nav_link"> <i class='bx bx-user nav_icon'></i> <span class="nav_name">Inventory</span> </a> 
+                    <a href="PharamcyAddDrug.php" class="nav_link"> <i class='bx bx-message-square-detail nav_icon'></i> <span class="nav_name">Add Drugs</span> </a> 
                 </div>
-            </div> 
-            <a href="#" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">SignOut</span> </a>
+            </div> <a href="Pharmacy.php" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">Sign Out</span> </a>
         </nav>
     </div>
 
@@ -54,40 +58,67 @@
 
     <br>
         <form method="post">
-        <div class="add-drug-container">
-            <div class="div-1">
-                <br><br>
-                <label>Drug Name</label>
-                <input type="text" placeholder="Drug Name" required >
-                <br><br>
-                <label>Quantity</label>
-                <input type="number" placeholder="Quantity" required>
-                <br><br>
-                <label>Type</label>
-                <select id="">
-                    <option value="oral" selected>Oral</option>
-                    <option value="insulin">Non-Oral</option>
-                </select>
-
-            </div>
-            <div class="div-1">
-            <br><br>
-            <label>Manufacter</label>
-                <input type="text" placeholder="Name" id="" required> 
-                <br><br>
-            <label>Manufacter Date</label>
-                <input type="date" name="" id="datepicker" required>
-            <br><br>
-            <label>Expiry Date</label>
-                <input type="date" name="" id="datepicker" required>
-            </div>
+            <div class="add-drug-container">
+                <div class="div-1">
+                    <br><br>
+                    <label>Drug Name</label>
+                    <input type="text" name="name" placeholder="Drug Name" required >
+                    <br><br>
+                    <label>Type</label>
+                    <select id="" name="type" required>
+                        <option value="Oral" selected>Oral</option>
+                        <option value="Non-Oral">Non-Oral</option>
+                    </select>
+                    <br><br>
+                    <label>Manufacter Date</label>
+                    <input type="date" name="mfd" id="datepicker" required>
                 
-        </div>
-        <button type="submit">Add</button>
+
+                </div>
+                    <div class="div-1">
+                        <br><br>
+                        <label>Status</label>
+                        <select id="" name="status" required>
+                            <option value="Available" selected>Available</option>
+                            <option value="Unavailable">Unavailable</option>
+                        </select>
+                        <br><br>
+                        <label>Supplier</label>
+                            <input type="text" name="supplier" placeholder="Name" id="" required> 
+                            <br><br>
+                        
+                        <label>Expiry Date</label>
+                            <input type="date" name="exp" id="datepicker" required>
+                    </div>
+                    
+            </div>
+            <button type="submit" name="btnAdd">Add</button>
         </form>
     </div>
 
+    <?php
+        if(isset($_POST['btnAdd'])){
+            $name = $_POST["name"];
+            $type = $_POST["type"];
+            $status = $_POST["status"];
+            $mfd = $_POST["mfd"];
+            $supplier = $_POST["supplier"];
+            $exp = $_POST["exp"];
+            try{
+                $conn = conn::getConnection();
+                $sql = $conn->prepare("INSERT INTO `medicine`(`med_name`, `type`, `status`, `supplier_name`, `manu_date`, `exp_date`) 
+                                        VALUES (:name, :type, :status, :supplier, :mfd, :exp)");
+                $sql->execute([':name'=> $name,':type'=>$type,'status'=>$status, ':supplier'=>$supplier,':mfd'=>$mfd,':exp'=> $exp]);
+                $_SESSION['prescription_confirmed_success'] = true;
+                echo '<div class="alert alert-success" style="position: fixed; top: 10%; left: 50%; transform: translate(-50%, -50%); z-index: 999;" role="alert">Drug successfully updated!</div>';
+                header("Refresh: 2; URL=PharamacyInventory.php");
+                ob_end_flush();
 
+            }catch(Exception $e){
+                echo "ERROR: ".$e->getMessage();
+            }
+        }
+    ?>
 
 
 

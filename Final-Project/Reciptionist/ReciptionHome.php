@@ -2,6 +2,8 @@
     session_start();
     require_once ('../data/conn.php');
 	require_once('../data/methods.php');
+
+
     if(isset($_SESSION['patient_added_success']) && $_SESSION['patient_added_success'] == true) {
         echo '<div class="alert alert-success" role="alert">Patient successfully added!</div>';
         unset($_SESSION['patient_added_success']);
@@ -64,6 +66,7 @@
             echo 'Error connecting to database: ' . $e->getMessage();
             exit;
         }
+
         
 
     } 
@@ -83,7 +86,6 @@
                 <div class="nav_list"> 
                     <a href="ReciptionHome.php" class="nav_link active"> <i class='bx bx-grid-alt nav_icon'></i> <span class="nav_name">Home</span> </a> 
                     <a href="PReg1.php" class="nav_link"> <i class='bx bx-user nav_icon'></i> <span class="nav_name">Register</span> </a> 
-                    <a href="ChatUI.php" class="nav_link"> <i class='bx bx-message-square-detail nav_icon'></i> <span class="nav_name">Messages</span> </a> 
 
                 </div>
             </div> <a href="RecipLogin.php" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">SignOut</span> </a>
@@ -115,6 +117,7 @@
         <br>
         <br>
         <?php
+
             if (isset($_SESSION['logged_username'])) {
                 try{
                     if(isset($_POST['btnSearch'])){

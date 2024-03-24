@@ -96,7 +96,13 @@ button:hover {
     left: -3px;
     text-align: center;
 }
+.checking{
+    display: flex;
+}
 
+#updateCredentials{
+    margin: 0%;
+}
 .relative i.fa{
     position: absolute;
     top: 0;

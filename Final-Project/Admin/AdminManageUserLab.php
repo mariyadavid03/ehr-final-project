@@ -1,3 +1,9 @@
+<?php
+  session_start();
+  require_once ('../data/conn.php');
+  require_once('../data/methods.php');
+  ob_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
     
@@ -40,11 +46,10 @@
         <span>Manage User</span>
       </a>
       <div class="collapse submenu" id="manageUserSubMenu" style="margin-left: 30px;">  
-        <a href="../Admin/AdminManageUserLab.php" class="sidebar-link"><span>LAB</span></a>
-        <a href="../Admin/AdminManageUserPharmecy.php" class="sidebar-link"><span>Pharmacy</span></a>
+      <a href="../Admin/AdminManageUserLab.php" class="sidebar-link"><span>Lab Technician</span></a>
+        <a href="../Admin/AdminManageUserPharmecy.php" class="sidebar-link"><span>Pharmacist</span></a>
         <a href="../Admin/AdminManageUserDoctor.php" class="sidebar-link"><span>Doctor</span></a>
         <a href="../Admin/AdminManageUserRec.php" class="sidebar-link"><span>Receptionist</span></a>
-      </div>
     </li>
     <li class="sidebar-item">
       <a href="#" data-bs-toggle="collapse" data-bs-target="#LifestyleSubMenu" class="sidebar-link">
@@ -67,16 +72,29 @@
     </li>
   </ul>
   <div class="sidebar-footer">
-    <a href="../Admin .html" class="sidebar-link">
+    <a href="Adminlogin.php" class="sidebar-link">
       <i class="lni lni-exit"></i>
       <span>Logout</span>
     </a>
   </div>
 </aside>
+<?php
+  try{
+      $conn = conn::getConnection();
+      $sql = "SELECT lab_technician.lab_tech_id, lab_technician.staff_id, lab_technician.name, lab_technician.contact, user.username 
+                FROM lab_technician 
+                INNER JOIN user ON lab_technician.user_id = user.user_id";
+      $results = $conn->query($sql);
+
+  } catch(Exception $e){
+    echo "ERROR: ".$e->getMessage();
+  }
+
+?>
         <div class="main p-3">
             <div class="text-center">
                 <h1>
-                    Lab Users
+                    Lab Technician
                 </h1>
             </div>
             <br>
@@ -88,6 +106,21 @@
                 
             </div>  
             <br>
+            <?php
+                if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
+                    $deleteId = $_GET['delete'];
+                    $deleteSql = "DELETE FROM lab_technician WHERE lab_tech_id  = :id";
+                    $stmt = $conn->prepare($deleteSql);
+                    $stmt->bindParam(':id', $deleteId, PDO::PARAM_INT);
+                    if ($stmt->execute()) {
+                        echo "<p>Lab User with ID $deleteId has been deleted.</p>";
+                        header("Location: {$_SERVER['PHP_SELF']}");
+                        exit;
+                    } else {
+                        echo "Error deleting record: " . $stmt->errorInfo();
+                    }
+                }
+            ?>
             <br>
            
             <div class="container">
@@ -95,87 +128,39 @@
                     
                     
                     <div class="col-md-12">
-                    <h4>Lab Users List</h4>
+                    <h4>Lab Technicians List</h4>
                     <div class="table-responsive">
             
                             
                           <table id="mytable" class="table table-bordred table-striped">
                                
-                               <thead>
+                          <thead>
                                <th>ID</th>
+                               <th>Username</th>
                                 <th>Name</th>
-                                 <th>User Name</th>
-                                 <th>Status</th>
-                                 <th>Created</th>
-                                 <th>Updated</th>
-                                 <th>Edit</th>
-                                 <th>Delete</th>
-                               </thead>
+                                 <th>Contact</th>
+                                 <th>Action</th>
+                          </thead>
                 <tbody>
                 
-                <tr>
-              
-                <td>01</td>
-                <td>Samiru Geethmal</td>
-                <td>Samiru66</td>
-                <td>Active</td>
-                <td>7/12/24</td>
-                <td>7/12/24</td>
-                <td><button type="button" class="btn btn-primary btn-sm">Edit</button></td>
-                <td><button type="button" class="btn btn-danger btn-sm">Delete</button></td>
-                </tr>
+                <form action="" method="get">
+                        <?php foreach ($results as $result) : ?>
                 
-             <tr>
-               
-                <td>01</td>
-                <td>Samiru Geethmal</td>
-                <td>Samiru66</td>
-                <td>Active</td>
-                <td>7/12/24</td>
-                <td>7/12/24</td>
-                <td><button type="button" class="btn btn-primary btn-sm">Edit</button></td>
-                <td><button type="button" class="btn btn-danger btn-sm">Delete</button></td>
-                
-                
-             <tr>
-                
-                <td>01</td>
-                <td>Samiru Geethmal</td>
-                <td>Samiru66</td>
-                <td>Active</td>
-                <td>7/12/24</td>
-                <td>7/12/24</td>
-                <td><button type="button" class="btn btn-primary btn-sm">Edit</button></td>
-                <td><button type="button" class="btn btn-danger btn-sm">Delete</button></td>
-                
-                
-                
-             <tr>
-                
-                <td>01</td>
-                <td>Samiru Geethmal</td>
-                <td>Samiru66</td>
-                <td>Active</td>
-                <td>7/12/24</td>
-                <td>7/12/24</td>
-                <td><button type="button" class="btn btn-primary btn-sm">Edit</button></td>
-                <td><button type="button" class="btn btn-danger btn-sm">Delete</button></td>
-                
-                
-             <tr>
-                
-                <td>01</td>
-                <td>Samiru Geethmal</td>
-                <td>Samiru66</td>
-                <td>Active</td>
-                <td>7/12/24</td>
-                <td>7/12/24</td>
-                <td><button type="button" class="btn btn-primary btn-sm">Edit</button></td>
-                <td><button type="button" class="btn btn-danger btn-sm">Delete</button></td>
-                
-               
-                
-               
+                          <tr>
+                            <td><?php echo $result['staff_id']; ?></td>
+                            <td><?php echo $result['username']; ?></td>
+                            <td><?php echo $result['name']; ?></td>
+                            <td><?php echo $result['contact']; ?></td>
+                            
+                            <td>
+                                <a href='AdminUserEdit.php?type=lab&id=<?php echo htmlspecialchars($result['lab_tech_id']); ?>' class='btn btn-primary btn-sm'>Edit</a>
+
+                                <a href='?delete=<?php echo htmlspecialchars($result['lab_tech_id']); ?>' class='btn btn-danger btn-sm'>Delete</a>
+                            </td>
+                            
+                          </tr>
+                          <?php endforeach; ?>
+                          </form>
                 
                 </tbody>
                     

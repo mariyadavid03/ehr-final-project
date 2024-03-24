@@ -192,21 +192,16 @@
                 <div class="d-flex">
                     <div class="form-group" id="postMedicalHistoryFields">
                         <label for="patientNumber">Past Medical History</label>
-                        <input type="text" name="pastMedHistory[]" class="form-control mb-3" placeholder="Past Medical History" required>
-                    </div>
-                    <div class="py-4" style="margin-left:3px">
-                        <button type="button" style="border-radius:50%" class="btn btn-outline-secondary" onclick="addTextField('postMedicalHistoryFields')">+</button>
+                        <input type="text" name="pastMedHistory" class="form-control mb-3" placeholder="Past Medical History" required>
                     </div>
                 </div>    
                 <div class="d-flex" style="margin-left:40px">
                     <div class="form-group" id="allergiesFields">
                         <label for="patientNumber">Allergies</label>
-                        <input type="text" name="allergies[]" class="form-control mb-3" placeholder="Allergies">
+                        <input type="text" name="allergies" class="form-control mb-3" placeholder="Allergies">
                     </div>
 
-                     <div class="py-4" style="margin-left:3px">
-                     <button type="button" style="border-radius:50%"  class="btn btn-outline-secondary" onclick="addTextField('allergiesFields')">+</button>
-                        </div>
+                     
                 </div>
                 </div>    
 
@@ -296,19 +291,8 @@
             $refferdBy = $_POST["refferedBy"];
             $substance = $_POST["substanceUse"];
             $currentMedi = $_POST["currentMedi"];
-
-
-            if(isset($_POST["pastMedHistory"])) {
-                $pastMedHistory = $_POST["pastMedHistory"];
-            } else {
-                $pastMedHistory = array();
-            }
-            if(isset($_POST["allergies"])) {
-                $allergies = $_POST["allergies"];
-            } else {
-                $allergies = array();
-            }
-
+            $pastMedHistory = $_POST["pastMedHistory"];
+            $allergies = $_POST["allergies"];
             $familyMemName = $_POST["fmname"];
             $relation = $_POST["relate"];
             $disease = $_POST["disease"];
@@ -319,7 +303,7 @@
             try{
                 $conn = conn::getConnection();
                 
-                //Diagnosis 
+                //Diagnosis Assigm
 
                 $diagnosisQuery = $conn->prepare("INSERT INTO `diagnosis`(`diabetes_type`, `date`, `patient_id`) 
                                         VALUES (:dtype,:ddate,:pId)");
@@ -355,27 +339,11 @@
                     } 
                 }
                  //History
-                $historyQuery = $conn->prepare("INSERT INTO `history`( `reffered_by`, `substance_use`, `medication_on`, `patient_id`) 
-                                        VALUES (:refferdBy,:substanceUse,:medOn,:pId)");
-                $historyQuery->execute([':refferdBy'=> $refferdBy,':substanceUse'=> $substance,':medOn'=> $currentMedi,':pId'=> $patient_id]);
+                $historyQuery = $conn->prepare("INSERT INTO `history`( `reffered_by`, `substance_use`, `medication_on`,`allergies`, `med_conditions`, `patient_id`) 
+                                        VALUES (:refferdBy,:substanceUse,:medOn,:allergy,:pastMId,:pId)");
+                $historyQuery->execute([':refferdBy'=> $refferdBy,':substanceUse'=> $substance,':medOn'=> $currentMedi,':allergy'=>$$allergies,':pastMId'=>$pastMedHistory,':pId'=> $patient_id]);
                 $historyId = $conn->lastInsertId();
                 
-                //Past Medical Conditions
-                if(!empty($pastMedHistory)){
-                    foreach($pastMedHistory as $pastMed){
-                        $pastMedQuery = $conn->prepare("INSERT INTO `history_past_medical_history`(`history_id`, `past_medical_history`) 
-                        VALUES (:hId,:pastMId)");
-                        $pastMedQuery->execute([':hId'=> $historyId, ':pastMId'=> $pastMed]);
-                    }
-                }
-                //allergies
-                if(!empty($allergies)){
-                    foreach($allergies as $allergy){
-                        $allergyQuery = $conn->prepare("INSERT INTO `history_allergies`(`history_id`, `allergies`) 
-                                                VALUES (:hId,:allergy)");
-                        $allergyQuery->execute([':hId'=> $historyId, ':allergy'=> $allergy]);
-                    }
-                }
 
                 //family history
                 $fHistoryQuery = $conn->prepare("INSERT INTO `family_history`(`name`, `relationship`, `disease`, `history_id`) 
@@ -391,7 +359,7 @@
                 echo '<script>
                     setTimeout(function() {
                         window.location.href = "ReciptionHome.php";
-                    }, 3000); // 3000 milliseconds delay (3 seconds)
+                    }, 3000); 
                 </script>';
                 exit;
 

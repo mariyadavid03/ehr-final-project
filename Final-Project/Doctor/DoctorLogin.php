@@ -1,3 +1,10 @@
+<?php
+  session_start();
+	require_once ('../data/conn.php');
+	require_once('../data/methods.php');
+  $_SESSION = array();
+  session_destroy();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,27 +39,59 @@
               </div>
             </div>
           </div>
-          <form action="#!">
+          <form action="#!" method="post">
             <div class="row gy-3 gy-md-4 overflow-hidden">
               <div class="col-12">
                 <label for="email" class="form-label">Username<span class="text-danger">*</span></label>
-                <input type="email" class="form-control light-blue-outline" name="email" id="email" placeholder="name@example.com" required>
+                <input type="text" class="form-control light-blue-outline" name="username" id="email" placeholder="Enter Username" required>
               </div>
               <div class="col-12">
                 <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
-                <input type="password" class="form-control light-blue-outline" name="password" id="password" value="" required>
+                <input type="password" class="form-control light-blue-outline" name="password" placeholder="Enter Password" id="password" value="" required>
               </div>
             
               <div class="col-12">
                 <div class="d-grid">
-                  <button class="btn bsb-btn-xl btn-primary" type="submit"><B>LOGIN</B></button>
+                  <button class="btn bsb-btn-xl btn-primary" name="btnLogin" type="submit"><B>LOGIN</B></button>
                 </div>
               </div>
-              <div class="col-12">
-                <div class="d-grid">
-                  <button class="btn bsb-btn-xl btn-danger" type="submit"><B>BACK</B></button>
-                </div>
-              </div>
+              </form>
+
+          <?php
+              if(isset($_POST["btnLogin"])){
+                $username = $_POST["username"];
+                $password = $_POST["password"];
+
+              try {
+                $conn = conn::getConnection();
+                $sql = "SELECT user_id, username, password, role FROM user WHERE username = :username";
+                $query = $conn->prepare($sql);
+        
+                $query->execute([':username' => $username]);
+
+                $user = $query->fetch(PDO::FETCH_ASSOC);
+
+                if ((($user && password_verify($password, $user['password'])) || ($user && $password === $user['password'])) 
+                && $user['role'] === 'doctor') {
+                    session_start();
+                    $_SESSION['logged_id'] = $user['user_id'];
+                    $_SESSION['logged_username'] = $username;
+                    $_SESSION['logged_role'] = $user['role']; 
+
+                    
+
+                    header("Location: DoctorHome.php");
+                    exit;
+                  } else{
+                    echo 'Invalid username or password';
+                  }
+                } catch (Exception $e) {
+                  echo 'Error connecting to database: ' . $e->getMessage();
+                  exit;
+              }
+
+            }
+          ?>
             </div>
           </form>
         </div>

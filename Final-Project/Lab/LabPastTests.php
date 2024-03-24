@@ -1,3 +1,27 @@
+<?php
+session_start();
+require_once ('../data/conn.php');
+require_once('../data/methods.php');
+ob_start();
+    if (isset($_SESSION['logged_username'])) {
+        $username = $_SESSION['logged_username'];
+        $user_id = $_SESSION['logged_id'];
+        try {
+            $conn = conn::getConnection();
+            $sql = "SELECT `staff_id` FROM `lab_technician` WHERE `user_id` = :user_id";
+            $query = $conn->prepare($sql);
+            $query->execute([':user_id' => $user_id]);
+            $staffId = $query->fetch(PDO::FETCH_ASSOC);
+
+        }catch (Exception $e) {
+            echo 'Error connecting to database: ' . $e->getMessage();
+
+        }
+}
+else{
+    echo "NOO";
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,12 +62,10 @@
         <nav class="nav">
             <div>
                 <div class="nav_list"> 
-                    <a href="#" class="nav_link active"> <i class='bx bx-grid-alt nav_icon'></i> <span class="nav_name">Home</span> </a> 
-                    <a href="#" class="nav_link"> <i class='bx bx-user nav_icon'></i> <span class="nav_name">Past Lab Tests</span> </a> 
-                    <a href="#" class="nav_link"> <i class='bx bx-user nav_icon'></i> <span class="nav_name">Test Types</span> </a> 
-                    <a href="#" class="nav_link"> <i class='bx bx-message-square-detail nav_icon'></i> <span class="nav_name">Inbox</span> </a> 
+                <a href="LabHome.php" class="nav_link active"> <i class='bx bx-grid-alt nav_icon'></i> <span class="nav_name">Home</span> </a> 
+                    <a href="LabPastTests.php" class="nav_link"> <i class='bx bx-user nav_icon'></i> <span class="nav_name">Past Lab Tests</span> </a> 
                 </div>
-            </div> <a href="#" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">SignOut</span> </a>
+            </div> <a href="LabLogin.php" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">SignOut</span> </a>
         </nav>
     </div>
     <!--Container Main start-->
@@ -54,21 +76,51 @@
    
         <div class="row mt-5">
         <div class="col-md-5 mx-auto">
+        <form method="post">
             <div class="input-group">
-                <input class="form-control border-end-0 border" type="search" placeholder="Search Lab Test" id="example-search-input">
+                <input class="form-control border-end-0 border" type="search" placeholder="Search Lab Test"  name="searchInput" id="example-search-input">
                 <span class="input-group-append">
-                    <button class="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border ms-n5" type="button">
+                    <button class="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border ms-n5" name="btnSearch" type="button">
                         <i class="fa fa-search"></i>
                     </button>
                 </span>
             </div>
+            </form>
         </div>
         <br>
         <br>
         <br>
         <br>
         
+        <?php
+            try {
+                $conn = conn::getConnection();
+                $sql = "SELECT patient.patient_id,patient.phn, patient.first_name, patient.last_name, 
+                                test_request.request_id ,test_request.request_date, test_request.status, 
+                                test_result.result_id,  test_result.date, test_result.result_value, test_result.note, test_result.result_attachment, 
+                                lab_test.test_name
+                FROM patient 
+                INNER JOIN test_request ON patient.patient_id = test_request.patient_id
+                INNER JOIN test_result ON test_request.request_id = test_result.request_id
+                INNER JOIN lab_test ON test_request.test_id = lab_test.test_id
+                WHERE test_request.status = :status";
+                
+                $queryParams = [':status' => "Confirm"];
 
+                if (isset($_POST['btnSearch'])) {
+                    $searchTerm = '%' . $_POST["searchInput"] . '%'; // Assuming you want to search for partial matches
+                    $sql .= " AND (patient.phn LIKE :searchTerm OR patient.first_name LIKE :searchTerm OR patient.last_name LIKE :searchTerm OR lab_test.test_name LIKE :searchTerm)";
+                    $queryParams[':searchTerm'] = $searchTerm;
+                }
+                
+                $query = $conn->prepare($sql);
+                $query->execute($queryParams);
+                $tests = $query->fetchAll(PDO::FETCH_ASSOC);
+            } catch (Exception $e) {
+                echo "ERROR: " . $e->getMessage();
+            }
+
+        ?>
         <div class="container">
                 <div class="row">
                     
@@ -78,57 +130,34 @@
                     <div class="table-responsive">
                         <table id="mytable" class="table table-bordred table-striped">
                             <thead>
-                                <th>ID</th>
                                 <th>PHN</th>
-                                <th>Test Date</th>
+                                <th>Name</th>
                                 <th>Requested Date</th>
+                                <th>Test Date</th>
                                 <th>Test Type</th>
                                 <th>Result Value</th>
                                 <th>Note</th>
                                 <th>Attachment</th>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>01</td>
-                                    <td>92829182918</td>
-                                    <td>01/01/2024</td>
-                                    <td>01/02/2024</td>
-                                    <td>Sugar Test</td>
-                                    <td>123</td>
-                                    <td>-</td>
-                                    <td><button type="button" class="btn btn-primary btn-sm">View</button></td>
-                                </tr>  
-                                <tr>
-                                    <td>01</td>
-                                    <td>92829182918</td>
-                                    <td>01/01/2024</td>
-                                    <td>01/02/2024</td>
-                                    <td>Sugar Test</td>
-                                    <td>123</td>
-                                    <td>-</td>
-                                    <td><button type="button" class="btn btn-primary btn-sm">View</button></td>
-                                </tr> 
-                                <tr>
-                                <td>01</td>
-                                <td>92829182918</td>
-                                    <td>01/01/2024</td>
-                                    <td>01/02/2024</td>
-                                    <td>Sugar Test</td>
-                                    <td>123</td>
-                                    <td>-</td>
-                                    <td><button type="button" class="btn btn-primary btn-sm">View</button></td>
-                                </tr> 
-                                <tr>
-                                <td>01</td>
-                                <td>92829182918</td>
-                                    <td>01/01/2024</td>
-                                    <td>01/02/2024</td>
-                                    <td>Sugar Test</td>
-                                    <td>123</td>
-                                    <td>-</td>
-                                    <td><button type="button" class="btn btn-primary btn-sm">View</button></td>
-                                </tr>            
-                            </tbody>
+                            <form action="" method="post"> <!-- Move the form outside the loop -->
+    <tbody>
+        <?php foreach ($tests as $test): ?>
+            <tr>
+                <td><?php echo $test['phn']; ?></td>
+                <td><?php echo $test['first_name'] . " " . $test['last_name']; ?></td>
+                <td><?php echo $test['request_date']; ?></td>
+                <td><?php echo $test['date']; ?></td>
+                <td><?php echo $test['test_name']; ?></td>
+                <td><?php echo $test['result_value']; ?></td>
+                <td><?php echo $test['note']; ?></td>
+                <td>
+                    <input type="hidden" name="id" value="<?php echo $test['result_id']; ?>">
+                    <button type="submit" name="btnDownload">Download</button>
+                </td>
+            </tr>
+        <?php endforeach; ?>   
+    </tbody>
+</form>
                     
                         </table>
                     </div>
@@ -139,7 +168,34 @@
     </div>
 
 
+                    <?php 
+                    
+                    
+                            if (isset($_POST['btnDownload'])) {
+                                $id = $_POST['id'];
+                                try {
+                                    $conn = conn::getConnection();
+                                    $sql = "SELECT `result_attachment` FROM `test_result` WHERE `result_id` = :id";
+                                    $stmt = $conn->prepare($sql);
+                                    $stmt->execute([':id' => $id]);
+                                    $attachment = $stmt->fetch(PDO::FETCH_ASSOC)['result_attachment'];
 
+                                    // Set appropriate headers
+                                    header('Content-Type: application/octet-stream');
+                                    header('Content-Disposition: attachment; filename="attachment.jpg"');
+
+                                    // Output the attachment content
+                                    echo $attachment;
+                                    exit;
+                                } catch (Exception $e) {
+                                    echo 'Error: ' . $e->getMessage();
+                                }
+                            } else {
+                                echo 'Invalid request.';
+                            }
+                            ob_flush();
+                        
+                    ?>
 
 
 

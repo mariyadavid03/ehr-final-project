@@ -1,3 +1,8 @@
+<?php
+	session_start();
+	require_once ('../data/conn.php');
+	require_once('../data/methods.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
     
@@ -17,70 +22,58 @@
   <div class="wrapper">
     <div class="row">
       <div class="col-6 button-column">
-        <a href="../AdminManageUser.html" class="btn btn-danger active" style="background-color: red; color: white" role="button" aria-pressed="true">Back</a>
+        <a href="AdminManageUserDoctor.php" class="btn btn-danger active" style="background-color: red; color: white" role="button" aria-pressed="true">Back</a>
       </div>
     </div> 
-    <form class="form">
+
+    <form method="post" class="form">
 	  <h2>Add Doctor</h2>
 	  <div class="form-group">
 		  <label for="email">Name:</label>
 		  <div class="relative">
-			  <input class="form-control" id="name" type="text" pattern="[a-zA-Z\s]+" required="" autofocus="" title="Username should only contain letters. e.g. Piyush Gupta" autocomplete="" placeholder="Type your name here...">
+			  <input class="form-control" id="name" name="name" type="text" pattern="[a-zA-Z\s]+" required="" autofocus="" title="Username should only contain letters. e.g. Piyush Gupta" autocomplete="" placeholder="Name">
+			  <i class="fa fa-user"></i>
+		  </div>
+	  </div>
+	  <div class="form-group">
+		  <label for="email">Specialization:</label>
+		  <div class="relative">
+			  <input class="form-control" id="name" name="specialization" type="text" pattern="[a-zA-Z\s]+" required="" autofocus="" title="Username should only contain letters. e.g. Piyush Gupta" autocomplete="" placeholder="Specilizing Area">
 			  <i class="fa fa-user"></i>
 		  </div>
 	  </div>
 	  <div class="form-group">
 	  	<label for="email">Staff ID:</label>
 	  	<div class="relative">
-		  	<input class="form-control" type="email" required="" placeholder="Type your email address..." pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+		  	<input class="form-control" type="text" name="staffid" maxlength="8"  placeholder="Staff ID Number" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required>
 		  	<i class="fa fa-envelope"></i>
 	  	</div>
 	  </div>
 	  <div class="form-group">
 	  	<label for="email">Phone Number:</label>
 	  	<div class="relative">
-	  		<input class="form-control" type="text" maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'');" required="" placeholder="Type your Mobile Number...">
+	  		<input class="form-control" name="number" type="text" maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'');" placeholder="Contact Number" required>
 	  		<i class="fa fa-phone"></i>
 	  	</div>
 	  </div>
-	  <div class="form-group">
-	  	<label for="email">Email:</label>
-	  	<div class="relative">
-	  		<input class="form-control" type="Email" maxlength="" oninput="this.value=this.value.replace(/[^0-9]/g,'');" required="" placeholder="Type your Email Address...">
-	  		<i class="fa fa-phone"></i>
-	  	</div>
-	  </div>
+
 	  <div class="form-group">
 	  	<label for="email">Username:</label>
 	  	<div class="relative">
-	  		<input class="form-control" type="text" required="" placeholder="Enter Your Username">
+	  		<input class="form-control" name="username" type="text"  placeholder="Enter Your Username" required>
 	  		<i class="fa fa-building"></i>
 	  	</div>
 	  </div>
 	  <div class="form-group">
 	  	<label for="email">Password:</label>
 	  	<div class="relative">
-	  		<input class="form-control" type="Password" required="" placeholder="Enter Your Password">
+	  		<input class="form-control" name="password" type="Password"  placeholder="Enter Your Password" required>
 	  		<i class="fa fa-building"></i>
 	  	</div>
 	  </div>
-		<div class="form-group">
-			<label for="email">Attachment:</label>
-	  	<div class="relative">
-	  		<div class="input-group">
-          <label class="input-group-btn">
-            <span class="btn btn-default">
-                Browse&hellip; <input type="file" style="display: none;" multiple>
-            </span>
-          </label>
-          <input type="text" class="form-control" required="" placeholder="Attachment..." readonly>
-          <i class="fa fa-link"></i>
-      	</div>
-	  	</div>
-	  </div>     	
 	  <div class="tright">
 	  	<a href=""><button class="movebtn movebtnre" type="Reset"><i class="fa fa-fw fa-refresh"></i> Reset </button></a>
-	  	<a href=""><button class="movebtn movebtnsu" type="Submit">Submit <i class="fa fa-fw fa-paper-plane"></i></button></a>
+	  	<a href=""><button class="movebtn movebtnsu" name="btnSubmit" type="submit">Submit <i class="fa fa-fw fa-paper-plane"></i></button></a>
 	  </div>
 	</form>
 
@@ -89,7 +82,45 @@
 		<p><small>Your message has been successfully sent.</small></p>
 	</div>
 
+	<?php
 
+if (isset($_POST["btnSubmit"])){
+	$name = $_POST["name"];
+	$staffid = $_POST["staffid"];
+	$sp = $_POST["specialization"];
+	$number = $_POST["number"];
+	$username = $_POST["username"];
+	$password = $_POST["password"];
+
+	$salt = random_bytes(22);
+	$hashed_password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
+
+	try{
+		$conn = conn::getConnection();
+		$query = $conn->prepare("INSERT INTO `user`
+				(`username`, `password`, `role`) 
+				VALUES 
+				(:username, :password, :role)");
+		$query->execute([':username' => $username, ':password' => $hashed_password, ':role' => "doctor"]);
+		
+		$user_id = $conn->lastInsertId();  
+		$query1 = $conn->prepare("INSERT INTO `doctor`
+				(`staff_id`, `name`, `contact`, `specialization`,`user_id`) 
+				VALUES 
+				(:staffid,:name,:contact,:sp,:userid)");
+		$query1->execute([':staffid' => $staffid, ':name' => $name, ':contact' => $number,':sp'=> $sp, ':userid' => $user_id]);
+		//log_audit_trail("Add Account", "Created recptionit id " .$user_id. " account", $logged_username);
+		header("Location: AdminManageUserDoctor.php");
+
+
+	} catch(Exception $e){
+		echo 'Erro: ' .$e->getMessage();
+	}
+}
+
+
+
+?>
 
   </div>
 

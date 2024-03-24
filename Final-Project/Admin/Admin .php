@@ -1,3 +1,8 @@
+<?php
+  session_start();
+  require_once('../data/conn.php');
+  
+?>
 <!DOCTYPE html>
 <html lang="en">
     
@@ -15,29 +20,31 @@
 <body>
 
     <div class="wrapper">
-    <aside id="sidebar">
-  <div class="d-flex">
-    <button class="toggle-btn" type="button">
-      <i class="lni lni-grid-alt"></i>
-    </button>
-    <div class="sidebar-logo">
-      <a href="#">Admin Panel</a>
-    </div>
-  </div>
-  <ul class="sidebar-nav">
-    <li class="sidebar-item">
-      <a href="../Admin/Admin .php" class="sidebar-link">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
-  <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z"/>
-</svg>
-        <span>Home</span>
-      </a>
-    </li>
+      <aside id="sidebar">
+        <div class="d-flex">
+          <button class="toggle-btn" type="button">
+            <i class="lni lni-grid-alt"></i>
+          </button>
+          <div class="sidebar-logo">
+            <a href="#">Admin Panel</a>
+          </div>
+        </div>
+          <ul class="sidebar-nav">
+            <li class="sidebar-item">
+             <a href="../Admin/Admin .php" class="sidebar-link">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
+                <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z"/>
+              </svg>
+
+                <span>Home</span>
+            </a>
+        </li>
     <li class="sidebar-item">
       <a href="#" data-bs-toggle="collapse" data-bs-target="#manageUserSubMenu" class="sidebar-link">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill-gear" viewBox="0 0 16 16">
-  <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4m9.886-3.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0"/>
-</svg>
+        <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4m9.886-3.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0"/>
+      </svg>
+
         <span>Manage User</span>
       </a>
       <div class="collapse submenu" id="manageUserSubMenu" style="margin-left: 30px;">  
@@ -74,6 +81,37 @@
     </a>
   </div>
 </aside>
+
+  <?php
+  try{
+    $conn = conn::getConnection();
+    $sqlTotalStaffCount = "SELECT SUM(cnt) AS total_staff_count FROM (
+                          SELECT COUNT(*) AS cnt FROM admin
+                          UNION ALL
+                          SELECT COUNT(*) AS cnt FROM lab_technician
+                          UNION ALL
+                          SELECT COUNT(*) AS cnt FROM pharmacist
+                          UNION ALL
+                          SELECT COUNT(*) AS cnt FROM doctor
+                          UNION ALL
+                          SELECT COUNT(*) AS cnt FROM receptionist) AS counts";
+    
+    $stmtTotalStaffCount = $conn->prepare($sqlTotalStaffCount);
+    $stmtTotalStaffCount->execute();
+    $totalStaffCount = $stmtTotalStaffCount->fetch(PDO::FETCH_ASSOC)['total_staff_count'];
+
+    $sqlPatientCount = "SELECT COUNT(*) AS patient_count FROM patient";
+    $stmtPatientCount = $conn->prepare($sqlPatientCount);
+    $stmtPatientCount->execute();
+    $patientCount = $stmtPatientCount->fetch(PDO::FETCH_ASSOC)['patient_count'];
+    
+    $onlineUsersCount = isset($_SESSION['online_users_count']) ? $_SESSION['online_users_count'] : 0;
+
+  }catch(Exception $e){
+    echo "ERROR: ".$e->getMessage();
+  }
+    
+  ?>
         <div class="main p-3">
             <div class="text-center">
                 <h1>
@@ -85,18 +123,26 @@
             <br>
             <br>
             <div class="Accountcounts">
-             <div class="stffacc">
+                <div class="stffacc">
                     <h1>
                     <B>Staff Accounts</B>
                     </h1>
-                <h1 class="text-center">1</h1>
+                    <h1 class="text-center">
+                      <?php echo $totalStaffCount;  ?>
+                    </h1>
                 </div>
+                
                 <div class="Repacc">
                     <h1>
                         <B>Patients Accounts</B>
                     </h1>
-                    <h1 class="text-center">1</h1>
+                    <h1 class="text-center">
+                    <?php echo $patientCount;  ?>
+                    </h1>
                 </div>
+
+                
+                
                 
             </div>  
             <br>
@@ -119,11 +165,13 @@
                 </div>
                 <div class="vl"></div>
                  <div class="navlinks">
-                <a href="#" class="btn btn-dark btn-sm active" role="button" aria-pressed="true">view</a><br><br>
-                <a href="#" class="btn btn-dark btn-sm active" role="button" aria-pressed="true">view</a><br><br>  
-                <a href="#" class="btn btn-dark btn-sm active" role="button" aria-pressed="true">view</a><br><br>
-                <a href="#" class="btn btn-dark btn-sm active" role="button" aria-pressed="true">view</a><br><br>
-                <a href="#" class="btn btn-dark btn-sm active" role="button" aria-pressed="true">view</a><br>
+                 <div class="navlinks">
+                  <a href="#" class="btn btn-dark btn-sm active" role="button" aria-pressed="true" target="_blank">view</a><br><br>
+                  <a href="#" class="btn btn-dark btn-sm active" role="button" aria-pressed="true" target="_blank">view</a><br><br>  
+                  <a href="../Lab/LabLogin.php" class="btn btn-dark btn-sm active" role="button" aria-pressed="true" target="_blank">view</a><br><br>
+                  <a href="../Pharmacy/Pharmacy.php" class="btn btn-dark btn-sm active" role="button" aria-pressed="true" target="_blank">view</a><br><br>
+                  <a href="../Reciptionist/RecipLogin.php" class="btn btn-dark btn-sm active" role="button" aria-pressed="true" target="_blank">view</a><br>
+                </div>
             </div>
         </div>
         </div>

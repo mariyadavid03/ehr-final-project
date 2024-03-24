@@ -1,3 +1,9 @@
+<?php
+session_start();
+require_once('../data/conn.php');
+require_once('../data/methods.php');
+ob_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
     
@@ -5,11 +11,24 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Audit Trail</title>
+    <title>Audit Trail</title>
     <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-    <link rel="stylesheet" href="../Css/AdminpanelManageUser.css">
+    
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
+
+<!-- Link Boxicons CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<!--=============== BOXICONS ===============-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+
+
+        <link rel="stylesheet" href="../Css/AdminpanelManageUser.css">
 </head>
 
 <body>
@@ -74,6 +93,7 @@
   </div>
 </aside>
         <div class="main p-3">
+          <br><br>
             <div class="text-center">
                 <h1>
                     Audit Trail
@@ -81,6 +101,36 @@
             </div>
             <br>
             <br>
+            <div class="col-md-5 mx-auto">
+                    <form method="post">
+                            <div class="input-group">
+                                <input class="form-control border-end-0 border" type="search" name="search" placeholder="Search" id="example-search-input">
+                                <span class="input-group-append">
+                                    <button class="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border ms-n5" type="submit" name="btnSearch">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                    <?php
+                    // Search functionality
+                    if (isset($_POST['btnSearch'])) {
+                        $searchTerm = $_POST['search'];
+                        $sql1 = "SELECT  * FROM `audit_trail` WHERE `event_type` LIKE :searchTerm OR `description` LIKE :searchTerm OR `datetime` LIKE :searchTerm OR `username` LIKE :searchTerm";
+                        $conn = conn::getConnection();
+                        $query1 = $conn->prepare($sql1);
+                        $query1->execute([':searchTerm' => "%$searchTerm%"]);
+                        $trails = $query1->fetchAll(PDO::FETCH_ASSOC);
+
+                    } else{
+                        $sql1 = "SELECT  * FROM `audit_trail`";
+                        $conn = conn::getConnection();
+                        $query1 = $conn->prepare($sql1);
+                        $query1->execute();
+                        $trails = $query1->fetchAll(PDO::FETCH_ASSOC);
+                    }
+                ?> 
             <br>
             <br>
            
@@ -99,56 +149,25 @@
                                <th>Trail ID</th>
                                <th>Username</th>
                                <th>Event Type</th>
-                               <th>Date and Time</th>
+                               <th>Description</th>
+                               <th>DateTime</th>
                                </thead>
-                <tbody>
-                
-                                <tr>
-                            
-                                <td>01</td>
-                                <td>Samiru Geethmal</td>
-                                <td>Samiru66</td>
-                                <td>3/14/2024</td>
-                                </tr>
-                                
-                                <tr>
-              
-                                <td>01</td>
-                                <td>Samiru Geethmal</td>
-                                <td>Samiru66</td>
-                                <td>3/14/2024</td>
-                                </tr>
-                                    
-                                <tr>
-                                
-                                <td>01</td>
-                                <td>Samiru Geethmal</td>
-                                <td>Samiru66</td>
-                                <td>3/14/2024</td>
-                                </tr>
-                                    
-                                    
-                                    
-                                <tr>
-                                
-                                <td>01</td>
-                                <td>Samiru Geethmal</td>
-                                <td>Samiru66</td>
-                                <td>3/14/2024</td>
-                                </tr>
-                                    
-                                <tr>
-                                
-                                <td>01</td>
-                                <td>Samiru Geethmal</td>
-                                <td>Samiru66</td>
-                                <td>3/14/2024</td>
-                                </tr>
-                                
-                
-               
-                
-                </tbody>
+                               <tbody>
+                                    <form action="" method="get">
+                                    <?php foreach ($trails as $trail) : ?>
+                                        <?php
+                                         
+                                        ?>
+                                        <tr>
+                                            <td><?php echo $trail['trail_id']; ?></td>
+                                            <td><?php echo $trail['username']; ?></td>
+                                            <td><?php echo $trail['event_type']; ?></td>
+                                            <td><?php echo $trail['description']; ?></td>
+                                            <td><?php echo $trail['datetime']; ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                    </form>
+                                </tbody> 
                     
             </table>
 

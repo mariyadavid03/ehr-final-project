@@ -1,4 +1,5 @@
 <?php
+	session_start();
 	require_once ('../data/conn.php');
 	require_once('../data/methods.php');
 ?>
@@ -21,30 +22,30 @@
   <div class="wrapper">
     <div class="row">
       <div class="col-6 button-column">
-        <a href="../AdminManageUser.html" class="btn btn-danger active" style="background-color: red; color: white" role="button" aria-pressed="true">Back</a>
+        <a href="AdminManageUserRec.php" class="btn btn-danger active" style="background-color: red; color: white" role="button" aria-pressed="true">Back</a>
       </div>
     </div>
 
     <form method="post" class="form">
-	  <h2>Add Lab User</h2>
+	  <h2>Add Receptionist</h2>
 	  <div class="form-group">
 		  <label for="email">Name:</label>
 		  <div class="relative">
-			  <input class="form-control" id="name" name="name" type="text" pattern="[a-zA-Z\s]+" required="" autofocus="" title="Username should only contain letters. e.g. Piyush Gupta" autocomplete="" placeholder="Type your name here...">
+			  <input class="form-control" id="name" name="name" type="text" pattern="[a-zA-Z\s]+"  autofocus="" title="Username should only contain letters. e.g. Piyush Gupta" autocomplete="" placeholder="Type your name here..." required>
 			  <i class="fa fa-user"></i>
 		  </div>
 	  </div>
 	  <div class="form-group">
 	  	<label for="email">Staff ID:</label>
 	  	<div class="relative">
-		  	<input class="form-control" type="text" name="staffid" required="" placeholder="Type your email address..." pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+		  	<input class="form-control" type="text" name="staffid" maxlength="8"  placeholder="Type your email address..." pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required>
 		  	<i class="fa fa-envelope"></i>
 	  	</div>
 	  </div>
 	  <div class="form-group">
 	  	<label for="email">Phone Number:</label>
 	  	<div class="relative">
-	  		<input class="form-control" name="number" type="text" maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'');" required="" placeholder="Type your Mobile Number...">
+	  		<input class="form-control" name="number" type="text" maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'');" placeholder="Type your Mobile Number..." required>
 	  		<i class="fa fa-phone"></i>
 	  	</div>
 	  </div>
@@ -52,14 +53,14 @@
 	  <div class="form-group">
 	  	<label for="email">Username:</label>
 	  	<div class="relative">
-	  		<input class="form-control" name="username" type="text" required="" placeholder="Enter Your Username">
+	  		<input class="form-control" name="username" type="text"  placeholder="Enter Your Username" required>
 	  		<i class="fa fa-building"></i>
 	  	</div>
 	  </div>
 	  <div class="form-group">
 	  	<label for="email">Password:</label>
 	  	<div class="relative">
-	  		<input class="form-control" name="password" type="Password" required="" placeholder="Enter Your Password">
+	  		<input class="form-control" name="password" type="Password"  placeholder="Enter Your Password" required>
 	  		<i class="fa fa-building"></i>
 	  	</div>
 	  </div>
@@ -101,8 +102,8 @@
 						VALUES 
 						(:staffid,:name,:contact,:userid)");
 				$query1->execute([':staffid' => $staffid, ':name' => $name, ':contact' => $number, ':userid' => $user_id]);
-				log_audit_trail("Add Account", "Created recptionit id " .$user_id. " account", $logged_username);
-
+				//log_audit_trail("Add Account", "Created recptionit id " .$user_id. " account", $logged_username);
+				header("Location: AdminManageUserRec.php");
 
 
 			} catch(Exception $e){

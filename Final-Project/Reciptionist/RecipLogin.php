@@ -81,9 +81,7 @@
                     $_SESSION['logged_username'] = $username;
                     $_SESSION['logged_role'] = $user['role']; 
 
-                    /*echo "ID: ". $_SESSION['logged_id'];
-                    echo "Usernmae: ".$_SESSION['logged_username'];
-                    echo "role: ".$_SESSION['logged_role'] ;*/
+                    
 
                     header("Location: ReciptionHome.php");
                     exit;

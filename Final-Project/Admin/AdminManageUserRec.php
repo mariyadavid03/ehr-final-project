@@ -1,3 +1,9 @@
+<?php
+  session_start();
+  require_once ('../data/conn.php');
+  require_once('../data/methods.php');
+  ob_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
     
@@ -14,21 +20,21 @@
 
 <body>
     <div class="wrapper">
-    <aside id="sidebar">
-  <div class="d-flex">
-    <button class="toggle-btn" type="button">
-      <i class="lni lni-grid-alt"></i>
-    </button>
-    <div class="sidebar-logo">
-      <a href="#">Admin Panel</a>
-    </div>
-  </div>
-  <ul class="sidebar-nav">
-    <li class="sidebar-item">
-    <a href="../Admin/Admin .php" class="sidebar-link">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
-  <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z"/>
-</svg>
+      <aside id="sidebar">
+        <div class="d-flex">
+          <button class="toggle-btn" type="button">
+            <i class="lni lni-grid-alt"></i>
+          </button>
+          <div class="sidebar-logo">
+            <a href="#">Admin Panel</a>
+          </div>
+        </div>
+        <ul class="sidebar-nav">
+          <li class="sidebar-item">
+          <a href="../Admin/Admin .php" class="sidebar-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
+              <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z"/>
+            </svg>
         <span>Home</span>
       </a>
     </li>
@@ -40,8 +46,8 @@
         <span>Manage User</span>
       </a>
       <div class="collapse submenu" id="manageUserSubMenu" style="margin-left: 30px;">  
-        <a href="../Admin/AdminManageUserLab.php" class="sidebar-link"><span>LAB</span></a>
-        <a href="../Admin/AdminManageUserPharmecy.php" class="sidebar-link"><span>Pharmacy</span></a>
+        <a href="../Admin/AdminManageUserLab.php" class="sidebar-link"><span>Lab Technician</span></a>
+        <a href="../Admin/AdminManageUserPharmecy.php" class="sidebar-link"><span>Pharmacist</span></a>
         <a href="../Admin/AdminManageUserDoctor.php" class="sidebar-link"><span>Doctor</span></a>
         <a href="../Admin/AdminManageUserRec.php" class="sidebar-link"><span>Receptionist</span></a>
       </div>
@@ -67,29 +73,58 @@
     </li>
   </ul>
   <div class="sidebar-footer">
-    <a href="../Admin .html" class="sidebar-link">
+    <a href="Adminlogin.php" class="sidebar-link">
       <i class="lni lni-exit"></i>
       <span>Logout</span>
     </a>
   </div>
 </aside>
+
+<?php
+  try{
+      $conn = conn::getConnection();
+      $sql = "SELECT receptionist.receptionist_id, receptionist.staff_id, receptionist.name, receptionist.contact, user.username 
+                FROM receptionist 
+                INNER JOIN user ON receptionist.user_id = user.user_id";
+      $results = $conn->query($sql);
+
+  } catch(Exception $e){
+    echo "ERROR: ".$e->getMessage();
+  }
+
+?>
         <div class="main p-3">
             <div class="text-center">
                 <h1>
-                   Receptionists
+                  Receptionists
                 </h1>
             </div>
             <br>
             <br>
             <div class="Accountcounts">
                 <div class="Repacc">
+                  
                     <a href="../Admin/AdminAddLRecipUser.php" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">+Add User</a>
                 </div>
                 
             </div>  
             <br>
             <br>
-           
+            <?php
+                if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
+                    $deleteId = $_GET['delete'];
+                    $deleteSql = "DELETE FROM receptionist WHERE receptionist_id = :receptionist_id";
+                    $stmt = $conn->prepare($deleteSql);
+                    $stmt->bindParam(':receptionist_id', $deleteId, PDO::PARAM_INT);
+                    if ($stmt->execute()) {
+                        echo "<p>Receptionist with ID $deleteId has been deleted.</p>";
+                        header("Location: {$_SERVER['PHP_SELF']}");
+                        exit;
+                    } else {
+                        echo "Error deleting record: " . $stmt->errorInfo();
+                    }
+                }
+            ?>
             <div class="container">
                 <div class="row">
                     
@@ -103,86 +138,36 @@
                                
                                <thead>
                                <th>ID</th>
+                               <th>Username</th>
                                 <th>Name</th>
-                                 <th>User Name</th>
-                                 <th>Status</th>
-                                 <th>Created</th>
-                                 <th>Updated</th>
-                                 <th>Edit</th>
-                                 <th>Delete</th>
+                                 <th>Contact</th>
+                                 <th>Action</th>
                                </thead>
-                <tbody>
+                      <tbody>
+                      <form action="" method="get">
+                        <?php foreach ($results as $result) : ?>
                 
-                <tr>
-              
-                <td>01</td>
-                <td>Samiru Geethmal</td>
-                <td>Samiru66</td>
-                <td>Active</td>
-                <td>7/12/24</td>
-                <td>7/12/24</td>
-                <td><button type="button" class="btn btn-primary btn-sm">Edit</button></td>
-                <td><button type="button" class="btn btn-danger btn-sm">Delete</button></td>
-                </tr>
-                
-             <tr>
-               
-                <td>01</td>
-                <td>Samiru Geethmal</td>
-                <td>Samiru66</td>
-                <td>Active</td>
-                <td>7/12/24</td>
-                <td>7/12/24</td>
-                <td><button type="button" class="btn btn-primary btn-sm">Edit</button></td>
-                <td><button type="button" class="btn btn-danger btn-sm">Delete</button></td>
-                
-                
-             <tr>
-                
-                <td>01</td>
-                <td>Samiru Geethmal</td>
-                <td>Samiru66</td>
-                <td>Active</td>
-                <td>7/12/24</td>
-                <td>7/12/24</td>
-                <td><button type="button" class="btn btn-primary btn-sm">Edit</button></td>
-                <td><button type="button" class="btn btn-danger btn-sm">Delete</button></td>
-                
-                
-                
-             <tr>
-                
-                <td>01</td>
-                <td>Samiru Geethmal</td>
-                <td>Samiru66</td>
-                <td>Active</td>
-                <td>7/12/24</td>
-                <td>7/12/24</td>
-                <td><button type="button" class="btn btn-primary btn-sm">Edit</button></td>
-                <td><button type="button" class="btn btn-danger btn-sm">Delete</button></td>
-                
-                
-             <tr>
-                
-                <td>01</td>
-                <td>Samiru Geethmal</td>
-                <td>Samiru66</td>
-                <td>Active</td>
-                <td>7/12/24</td>
-                <td>7/12/24</td>
-                <td><button type="button" class="btn btn-primary btn-sm">Edit</button></td>
-                <td><button type="button" class="btn btn-danger btn-sm">Delete</button></td>
-                
-               
-                
-               
-                
-                </tbody>
+                          <tr>
+                            <td><?php echo $result['staff_id']; ?></td>
+                            <td><?php echo $result['username']; ?></td>
+                            <td><?php echo $result['name']; ?></td>
+                            <td><?php echo $result['contact']; ?></td>
+                            
+                            <td>
+                                <a href='AdminUserEdit.php?type=receptionist&id=<?php echo htmlspecialchars($result['receptionist_id']); ?>' class='btn btn-primary btn-sm'>Edit</a>
+
+                                <a href='?delete=<?php echo htmlspecialchars($result['receptionist_id']); ?>' class='btn btn-danger btn-sm'>Delete</a>
+                            </td>
+                            
+                          </tr>
+                          <?php endforeach; ?>
+                          </form>
+                       </tbody>
                     
-            </table>
+                      </table>
 
                             
-                        </div>
+                    </div>
                         
                     </div>
                 </div>

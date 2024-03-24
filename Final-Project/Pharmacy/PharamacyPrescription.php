@@ -1,3 +1,14 @@
+<?php
+  session_start();
+  require_once ('../data/conn.php');
+  require_once('../data/methods.php');
+  ob_start();
+  if(isset($_GET['prescriptionId'])) {
+    $p_id = $_GET['prescriptionId'];
+  } else {
+    echo "Prescription ID not provided!";
+  }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,35 +42,55 @@
 <header class="header" id="header">
     <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
     <a href="#"  id="open-modal">
-        <div class="header_img"> <img src="https://i.imgur.com/hczKIze.jpg" alt=""> </div>
+        
     </a>
 </header>
     <div class="l-navbar" id="nav-bar">
-        <nav class="nav">
+    <nav class="nav">
             <div>
                 <div class="nav_list"> 
-                    <a href="#" class="nav_link active"> <i class='bx bx-grid-alt nav_icon'></i> <span class="nav_name">Home</span> </a> 
-                    <a href="#" class="nav_link"> <i class='bx bx-user nav_icon'></i> <span class="nav_name">Inventory</span> </a> 
-                    <a href="#" class="nav_link"> <i class='bx bx-message-square-detail nav_icon'></i> <span class="nav_name">Add Drugs</span> </a> 
-                    <a href="#" class="nav_link"><i class= 'bx bx-'></i> <span class="nav_name">Inbox</span>
+                    <a href="PharamacyHome.php" class="nav_link active"> <i class='bx bx-grid-alt nav_icon'></i> <span class="nav_name">Home</span> </a> 
+                    <a href="PharamacyInventory.php" class="nav_link"> <i class='bx bx-user nav_icon'></i> <span class="nav_name">Inventory</span> </a> 
+                    <a href="PharamcyAddDrug.php" class="nav_link"> <i class='bx bx-message-square-detail nav_icon'></i> <span class="nav_name">Add Drugs</span> </a> 
                 </div>
-            </div> <a href="#" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">SignOut</span> </a>
+            </div> <a href="Pharmacy.php" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">Sign Out</span> </a>
         </nav>
     </div>
     <!--Container Main start-->
     <div class="height-100 bg-light" id="main-div">
-       
+    
     <br>
     <br>
 
-   
+    <?php
+
+
+        try{
+            $conn = conn::getConnection();
+            $query1 = $conn->prepare("SELECT prescription.prescription_id,prescription.patient_id, prescription.p_status,prescribed_medicine.frequency,
+                                    prescribed_medicine.duration, prescribed_medicine.dosage,medicine.med_name	 
+                                    FROM prescription 
+                                    INNER JOIN prescription_prescribed_med ON prescription.prescription_id = prescription_prescribed_med.precription_id
+                                    INNER JOIN prescribed_medicine ON prescription_prescribed_med.pmed_id = prescribed_medicine.pmed_id
+                                    INNER JOIN medicine ON  prescribed_medicine.med_id = medicine.med_id
+                                    WHERE prescription.prescription_id = :prescriptionId");
+            $query1->bindParam(':prescriptionId', $p_id);
+            $query1->execute();
+            $prescription_data = $query1->fetchAll(PDO::FETCH_ASSOC);
+
+        }catch (Exception $e){
+            echo "Error: ".$e->getMessage();
+        }
+    ?>
+    
 
     <div class="container">
         <div class="row">
             <div class="col-md-12">
                 <h4>Prescription</h4>
                     <div class="table-responsive">
-                        <table id="mytable" class="table table-bordred table-striped">                            
+                    <form action="" method="post">    
+                    <table id="mytable"  class="table table-bordred table-striped">                            
                             <thead>
                                 <th></th>
                                 <th>Drug</th>
@@ -68,53 +99,67 @@
                                 <th>Duration</th>
                             </thead>
                             <tbody>
+                            
+                                <?php foreach ($prescription_data as $prescription) : ?>
                                 <tr>
-                                    <td><input type="checkbox" name="check" ></td>
-                                    <td>Insulin</td>
-                                    <td>10ml</td>
-                                    <td>3 times</td>
-                                    <td>2 months</td>
-                                </tr>     
-                                <tr>
-                                    <td><input type="checkbox" name="check" ></td>
-                                    <td>Insulin</td>
-                                    <td>10ml</td>
-                                    <td>3 times</td>
-                                    <td>2 months</td>
+                                    <td><input type="checkbox"></td>
+                                    <td><?php echo $prescription['med_name']; ?></td>
+                                    <td><?php echo $prescription['dosage']; ?></td>
+                                    <td><?php echo $prescription['frequency']; ?></td>
+                                    <td><?php echo $prescription['duration']; ?> </td>
                                 </tr>   
-                                <tr>
-                                    <td><input type="checkbox" name="check" ></td>
-                                    <td>Insulin</td>
-                                    <td>10ml</td>
-                                    <td>3 times</td>
-                                    <td>2 months</td>
-                                </tr>  
-                                <tr>
-                                    <td><input type="checkbox" name="check" ></td>
-                                    <td>Insulin</td>
-                                    <td>10ml</td>
-                                    <td>3 times</td>
-                                    <td>2 months</td>
-                                </tr>   
-                                <tr>
-                                    <td><input type="checkbox" name="check" ></td>
-                                    <td>Insulin</td>
-                                    <td>10ml</td>
-                                    <td>3 times</td>
-                                    <td>2 months</td>
-                                </tr>       
+                                <?php endforeach; ?>    
                             </tbody>
                     
                         </table>
-                        <button type="submit">Confirm</button>
+                        <button type="submit" name="btnConfirm">Confirm</button>
+                    </form>
                     </div>
                         
             </div>
         </div>
+        
     </div>
     </div>
 
+    <?php
+    if(isset($_POST["btnConfirm"])){
+        $precriptionId = $p_id;
+        $query = $conn->prepare("UPDATE `prescription` SET `p_status`= :p_status WHERE `prescription_id` = :precriptionId");
+        $query->execute([':p_status'=> "Confirm", ':precriptionId' => $precriptionId]);
+    
+        $_SESSION['prescription_confirmed_success'] = true;
+        echo '<div class="alert alert-success" style="position: fixed; top: 10%; left: 50%; transform: translate(-50%, -50%); z-index: 999;" role="alert">Prescription successfully confirmed!</div>';
+        header("Refresh: 2; URL=PharamacyHome.php");
+        ob_end_flush();
+    }
+?>
 
+    <?php
+            // Check if user is logged in
+        if (isset($_SESSION['logged_username'])) {
+            $username = $_SESSION['logged_username'];
+            $user_id = $_SESSION['logged_id'];
+            try{
+                $conn = conn::getConnection();
+                $sql1 = "SELECT `name`,`staff_id` FROM `pharmacist` WHERE `user_id` = :user_id";
+                $query1 = $conn->prepare($sql1);
+                $query1->execute([':user_id' => $user_id]);
+                $user= $query1->fetch(PDO::FETCH_ASSOC);
+    
+                if($user){
+                    $staff_id = $user['staff_id'];
+                    $name = $user['name'];
+                    $_SESSION['logged_name'] = $name;
+                }
+                else {
+                    echo 'no entry found';
+                }
+            }catch(Exception $e){
+                echo 'Error' . $e->getMessage();
+            }
+        }
+    ?>
 
 
 
@@ -137,9 +182,9 @@
                     <img src="../Images/images/pngwing.com.png" class="Profilepicture" srcset="">
                     <br>
                     <br>
-                    <h5 class="details"><B>Name:</B> <span>Pethum</span></h5>
-                    <h5 class="details"><B>Username:</B> <span>Pethum</span></h5>
-                    <h5 class="details"><B>ID:</B><span>Pethum</span></h5>
+                    <h5 class="details"><B>Staff ID:</B><span> <?php echo $staff_id; ?> </span></h5>
+                    <h5 class="details"><B>Name:</B> <span> <?php echo $name; ?> </span></h5>
+                    <h5 class="details"><B>Username:</B> <span> <?php echo $username; ?> </span></h5>
 
                 </div>
             </div>

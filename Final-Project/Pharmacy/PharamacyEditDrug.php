@@ -1,3 +1,15 @@
+<?php
+  session_start();
+  require_once ('../data/conn.php');
+  require_once('../data/methods.php');
+  ob_start();
+
+  if(isset($_GET['med_id'])) {
+    $med_id = $_GET['med_id'];
+  } else {
+    echo "Medicine ID not provided!";
+  }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,23 +40,38 @@
 </head>
 
 <body id="body-pd"> 
+<?php
+    try{
+        $conn = conn::getConnection();
+        $sql = $conn->prepare("SELECT `med_id`, `med_name`, `type`, `status`, `supplier_name`, `manu_date`, `exp_date` 
+                            FROM `medicine` WHERE `med_id` = :med_id");
+        $sql->execute([':med_id' => $med_id]);
+        $med = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+        if (!empty($med)) {
+            $med = $med[0];
+        } else {
+            echo "Medicine not found!";
+        }
+
+    } catch (Exception $e){
+        echo "Error: ".$e->getMessage();
+    }
+?>
     <header class="header" id="header">
         <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
         <a href="#"  id="open-modal">
-        <div class="header_img"> <img src="https://i.imgur.com/hczKIze.jpg" alt=""> </div>
         </a>
     </header>
     <div class="l-navbar" id="nav-bar">
-        <nav class="nav">
+    <nav class="nav">
             <div>
                 <div class="nav_list"> 
-                    <a href="#" class="nav_link active"> <i class='bx bx-grid-alt nav_icon'></i> <span class="nav_name">Home</span> </a> 
-                    <a href="#" class="nav_link"> <i class='bx bx-user nav_icon'></i> <span class="nav_name">Inventory</span> </a> 
-                    <a href="#" class="nav_link"> <i class='bx bx-message-square-detail nav_icon'></i> <span class="nav_name">Add Drugs</span> </a> 
-                    <a href="#" class="nav_link"><i class= 'bx bx-'></i> <span class="nav_name">Inbox</span>
+                    <a href="PharamacyHome.php" class="nav_link active"> <i class='bx bx-grid-alt nav_icon'></i> <span class="nav_name">Home</span> </a> 
+                    <a href="PharamacyInventory.php" class="nav_link"> <i class='bx bx-user nav_icon'></i> <span class="nav_name">Inventory</span> </a> 
+                    <a href="PharamcyAddDrug.php" class="nav_link"> <i class='bx bx-message-square-detail nav_icon'></i> <span class="nav_name">Add Drugs</span> </a> 
                 </div>
-            </div> 
-            <a href="#" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">SignOut</span> </a>
+            </div> <a href="Pharmacy.php" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">Sign Out</span> </a>
         </nav>
     </div>
 
@@ -54,36 +81,94 @@
 
     <br>
         <form method="post">
-        <div class="add-drug-container">
-            <div class="div-1">
-                <br><br>
-                <label>Status</label>
-                <select id="">
-                    <option value="oral" selected>Available</option>
-                    <option value="insulin">Unavailable</option>
-                </select>
-                <br><br>
-            <label>Manufacter Date</label>
-                <input type="date" name="" id="datepicker" required>
+            <div class="add-drug-container">
+                <div class="div-1">
+                    <br><br>
+                        <label>Name</label>
+                        <input type="text" value="<?php echo $med['med_name']; ?>" name="name">
+                    <br><br>
+                        <label>Status</label>
+                        <select id=""  name="availibilty">
+                            <?php  
+                                if (($med['status']) == "Available"){
+                                    echo '<option value="Available" selected>Available</option>
+                                    <option value="Unavailable">Unavailable</option>';
+                                } else{
+                                    echo '<option value="Available" >Available</option>
+                                    <option value="Unavailable" selected>Unavailable</option>';
+                                }
+                             ?>
 
+                        </select>
+
+                    <br><br>
+                        <label>Manufacter Date</label>
+                        <input type="date" value="<?php echo $med['manu_date']; ?>" name="mfd" id="datepicker">
+
+                </div>
+                <div class="div-1">
+                    <br><br>
+                        <label>Type</label>
+                        <select id="" name="type" required>
+                            <?php  
+                                if (($med['type']) == "Oral"){
+                                    echo '<option value="Oral" selected>Oral</option>
+                                    <option value="Non-Oral">Non-Oral</option>';
+                                } else{
+                                    echo '<option value="Oral">Oral</option>
+                                    <option value="Non-Oral" selected>Non-Oral</option>';
+                                }
+                             ?>
+                        </select>
+                    <br><br>
+                        <label>Supplier</label>
+                        <input type="text" value="<?php echo $med['supplier_name']; ?>" name="supplier" placeholder="Name" id="" required> 
+                        
+                    <br><br>
+                        <label>Expiry Date</label>
+                        <input type="date" value="<?php echo $med['exp_date']; ?>" name="exp" id="datepicker" required>
+                </div>
+                    
             </div>
-            <div class="div-1">
-            <br><br>
-            <label>Manufacter</label>
-                <input type="text" placeholder="Name" id="" required> 
-                
-            <br><br>
-            <label>Expiry Date</label>
-                <input type="date" name="" id="datepicker" required>
-            </div>
-                
-        </div>
-        <button type="submit">Update</button>
+            <button type="submit" name="btnUpdate">Update</button>
         </form>
     </div>
 
 
+    <?php
+        if(isset($_POST['btnUpdate'])){
+            $medName = $_POST["name"];
+            $medStatus= $_POST["availibilty"];
+            $medManuDate = $_POST["mfd"];
+            $medType = $_POST["type"];
+            $medSupplier = $_POST["supplier"];
+            $medExp = $_POST["exp"];
 
+            try{
+                $sql1 = $conn->prepare("UPDATE `medicine` SET `med_name`= :medName,
+                                        `type`= :medType,`status`= :medStatus,`supplier_name`= :medSupplier,
+                                        `manu_date`= :medManu,`exp_date`=:medExp WHERE `med_id` = :med_id");
+                $sql1->execute([
+                    ':medName' => $medName,
+                    ':medType' => $medType,
+                    ':medStatus' => $medStatus,
+                    ':medSupplier' => $medSupplier,
+                    ':medManu' => $medManuDate,
+                    ':medExp' => $medExp,
+                    ':med_id' => $med_id
+                ]);
+
+                $_SESSION['prescription_confirmed_success'] = true;
+                echo '<div class="alert alert-success" style="position: fixed; top: 10%; left: 50%; transform: translate(-50%, -50%); z-index: 999;" role="alert">Drug successfully updated!</div>';
+                header("Refresh: 2; URL=PharamacyInventory.php");
+                ob_end_flush();
+                
+            } catch (Exception $e){
+                echo "Error: ".$e->getMessage();
+            }
+
+        }
+    ?>
 
 
 
