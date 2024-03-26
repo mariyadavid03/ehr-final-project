@@ -26,8 +26,8 @@
 
 </head>
 
-<body id="body-pd" style="background-image:url(../Images/images/BG.jpg); background-size: 100% auto;"> 
-<header class="header" id="header" style="background-color: #F0F1F3;">
+<body id="body-pd" style="background-image:url(../Images/images/bg2.jpg); background-size: 100% auto; "> 
+<header class="header" id="header" style="background-color: #F0F1F3; margin-top:-2px;">
     <div class="header_toggle"><i class='bx bx-menu' id="header-toggle"></i></div>
 </header>
 

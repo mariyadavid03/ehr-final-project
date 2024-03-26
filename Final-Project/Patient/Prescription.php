@@ -21,7 +21,6 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
   <link rel="icon" type="imag/jpg" href="../Images/Icons/Dieabatecare.png">                     
 <!--=============== CSS ===============-->
-<link rel="stylesheet" href="../Css/PatientPrescreModal.css">
 <link rel="stylesheet" href="../Css/ReciptionHome.css">
 
 </head>
@@ -48,74 +47,7 @@
     <!--Container Main start--> 
     <div class="container">
     
-      <!--Prescreption View Modal start-->   
-       <div class="modal__container" id="modal-container">
-       <div class="modal__content" style="width: 101%; max-width: 500px;" id="prescriptionmodal">
-                    <div class="modal__close close-modal" title="Close">
-                        <i class='bx bx-x'></i>
-                    </div>
 
-                    <h1 class="modal__title">Prescription</h1>
-                    <br>
-                    <br>
-                    <div class="row">
-                    <div class="table-responsive">
-                    <div class="table-wrapper" style="height: 200px; width:auto">
-                    <table class="table table-bordered table-striped">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Dossage</th>
-      <th>Frequency</th>
-      <th>Duration</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Asprin</td>
-      <td>10ml</td>
-      <td>10ml</td>
-      <td>2 Months</td>
-    </tr>
-    <tr>
-      <td>2</td>
-      <td>Data 4</td>
-      <td>Data 5</td>
-      <td>Data 6</td>
-    </tr>
-    <tr>
-      <td>3</td>
-      <td>Data 7</td>
-      <td>Data 8</td>
-      <td>Data 9</td>
-    </tr>
-    <tr>
-      <td>4</td>
-      <td>Data 10</td>
-      <td>Data 11</td>
-      <td>Data 12</td>
-    </tr>
-    <tr>
-      <td>5</td>
-      <td>Data 13</td>
-      <td>Data 14</td>
-      <td>Data 15</td>
-    </tr>
-  </tbody>
-</table>
-                    </div>
-                    </div>
-                  </div>
-                </div>
-            </div>
-
-
-
-
-
-      
-
-    <!--Modal end-->
     
 
 
@@ -123,19 +55,6 @@
 
   <br>
   <br>
-  <br>
-  
-
-
-
-
-
-
-
-
-
-
-
     <div class="row" >
         <H2 style="-webkit-text-stroke: 1px black; color:white">Prescription</H2>
     </div>
