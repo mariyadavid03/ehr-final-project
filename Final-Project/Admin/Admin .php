@@ -48,8 +48,8 @@
         <span>Manage User</span>
       </a>
       <div class="collapse submenu" id="manageUserSubMenu" style="margin-left: 30px;">  
-        <a href="../Admin/AdminManageUserLab.php" class="sidebar-link"><span>LAB</span></a>
-        <a href="../Admin/AdminManageUserPharmecy.php" class="sidebar-link"><span>Pharmacy</span></a>
+        <a href="../Admin/AdminManageUserLab.php" class="sidebar-link"><span>Lab Technician</span></a>
+        <a href="../Admin/AdminManageUserPharmecy.php" class="sidebar-link"><span>Pharmacist</span></a>
         <a href="../Admin/AdminManageUserDoctor.php" class="sidebar-link"><span>Doctor</span></a>
         <a href="../Admin/AdminManageUserRec.php" class="sidebar-link"><span>Receptionist</span></a>
       </div>
@@ -75,7 +75,7 @@
     </li>
   </ul>
   <div class="sidebar-footer">
-    <a href="../Admin .html" class="sidebar-link">
+    <a href="../Admin/Adminlogin.php" class="sidebar-link">
       <i class="lni lni-exit"></i>
       <span>Logout</span>
     </a>
@@ -166,8 +166,8 @@
                 <div class="vl"></div>
                  <div class="navlinks">
                  <div class="navlinks">
-                  <a href="#" class="btn btn-dark btn-sm active" role="button" aria-pressed="true" target="_blank">view</a><br><br>
-                  <a href="#" class="btn btn-dark btn-sm active" role="button" aria-pressed="true" target="_blank">view</a><br><br>  
+                  <a href="../Patient/PatientLogin.php" class="btn btn-dark btn-sm active" role="button" aria-pressed="true" target="_blank">view</a><br><br>
+                  <a href="../Doctor/DoctorLogin.php" class="btn btn-dark btn-sm active" role="button" aria-pressed="true" target="_blank">view</a><br><br>  
                   <a href="../Lab/LabLogin.php" class="btn btn-dark btn-sm active" role="button" aria-pressed="true" target="_blank">view</a><br><br>
                   <a href="../Pharmacy/Pharmacy.php" class="btn btn-dark btn-sm active" role="button" aria-pressed="true" target="_blank">view</a><br><br>
                   <a href="../Reciptionist/RecipLogin.php" class="btn btn-dark btn-sm active" role="button" aria-pressed="true" target="_blank">view</a><br>

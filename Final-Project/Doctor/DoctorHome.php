@@ -106,37 +106,39 @@
         <br>
         <br>
         <?php
-            try {
-                $conn = conn::getConnection();
-                
-                //serach
-                if (isset($_POST['btnSearch'])) {
-                    $searchTerm = $_POST['patientIDInput'];
-                    $sql = "SELECT patient.patient_id,patient.phn, patient.user_id, patient.first_name, patient.last_name, patient.category_id,
-                            diagnosis.diabetes_type
-                            FROM patient 
-                            INNER JOIN diagnosis ON patient.patient_id = diagnosis.patient_id 
-                            WHERE patient.phn LIKE :searchTerm OR patient.first_name LIKE :searchTerm OR patient.last_name LIKE :searchTerm";
-                    $query = $conn->prepare($sql);
-                    $query->execute([':searchTerm' => "%$searchTerm%"]);
-                    $patients = $query->fetchAll(PDO::FETCH_ASSOC);
+    try {
+        $conn = conn::getConnection();
+        
+        // Search
+        if (isset($_POST['btnSearch'])) {
+            $searchTerm = $_POST['patientIDInput'];
+            $sql = "SELECT patient.patient_id,patient.phn, patient.user_id, patient.first_name, patient.last_name, patient.category_id,
+                    diagnosis.diabetes_type
+                    FROM patient 
+                    INNER JOIN diagnosis ON patient.patient_id = diagnosis.patient_id 
+                    WHERE patient.phn LIKE :searchTerm OR patient.first_name LIKE :searchTerm OR patient.last_name LIKE :searchTerm";
+            $query = $conn->prepare($sql);
+            $query->execute([':searchTerm' => "%$searchTerm%"]);
+            $patients = $query->fetchAll(PDO::FETCH_ASSOC);
 
-                } else{
-                    $sql = "SELECT patient.patient_id,patient.phn, patient.user_id, patient.first_name, patient.last_name, patient.category_id,
-                            diagnosis.diabetes_type
-                            FROM patient 
-                            INNER JOIN diagnosis ON patient.patient_id = diagnosis.patient_id";
-                            $query = $conn->prepare($sql);
-                    $query->execute();
-                    $patients = $query->fetchAll(PDO::FETCH_ASSOC);
-                }
-            
-            } catch (Exception $e) {
-                echo 'Error connecting to database: ' . $e->getMessage();
-                exit;
-            }
+        } else {
+            $sql = "SELECT patient.patient_id,patient.phn, patient.user_id, patient.first_name, patient.last_name, patient.category_id,
+                    diagnosis.diabetes_type
+                    FROM patient 
+                    INNER JOIN diagnosis ON patient.patient_id = diagnosis.patient_id";
+            $query = $conn->prepare($sql);
+            $query->execute();
+            $patients = $query->fetchAll(PDO::FETCH_ASSOC);
+        }
+        
 
-        ?>
+        
+    } catch (Exception $e) {
+        echo 'Error connecting to database: ' . $e->getMessage();
+        exit;
+    }
+?>
+
         <form action="" method="get">
             <div class="container">
                 <div class="row">
@@ -154,21 +156,23 @@
                 
                                     <tbody>
                 
-                                        <?php foreach ($patients as $patient) : ?>
-                    
-                                            <tr style="background-color: <?php echo ($patient['category_id'] == 1) ? '#ffbbbb' : (($patient['category_id'] == 2) ? '#ffe0af' :(($patient['category_id'] == 3) ? '#e6ffea' : '')); ?>">
-                
-                                                <td><?php echo $patient['phn']; ?></td>
-                                                <td><?php echo $patient['first_name'] . " " . $patient['last_name']; ?></td>
-                                                <td><?php echo $patient['diabetes_type']; ?></td>
-                                                <td>
-                                                <input type="hidden" name="category" <?php echo $patient['category_id']; ?>>
-                                                <button type="button" name="btnView" class="btn btn-primary btn-sm" onclick="viewPatient('<?php echo $patient['patient_id']; ?>')">View</button>
-                                                </td>
-                    
-                                            <tr>
-              
-                                        <?php endforeach; ?>
+                                    <?php if (empty($patients)) : ?>
+        <tr>
+            <td colspan="4">No results found.</td>
+        </tr>
+    <?php else : ?>
+        <?php foreach ($patients as $patient) : ?>
+            <tr style="background-color: <?php echo ($patient['category_id'] == 1) ? '#ffbbbb' : (($patient['category_id'] == 2) ? '#ffe0af' :(($patient['category_id'] == 3) ? '#e6ffea' : '')); ?>">
+                <td><?php echo $patient['phn']; ?></td>
+                <td><?php echo $patient['first_name'] . " " . $patient['last_name']; ?></td>
+                <td><?php echo $patient['diabetes_type']; ?></td>
+                <td>
+                    <input type="hidden" name="category" <?php echo $patient['category_id']; ?>>
+                    <button type="button" name="btnView" class="btn btn-primary btn-sm" onclick="viewPatient('<?php echo $patient['patient_id']; ?>')">View</button>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    <?php endif; ?>
                       
                                     </tbody>
                      

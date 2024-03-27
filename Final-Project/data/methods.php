@@ -14,4 +14,11 @@
         echo "Error: ".$e->getMessage();
     }
  }
+
+// Function to send verification code to email
+
+
+
+    
+
 ?>

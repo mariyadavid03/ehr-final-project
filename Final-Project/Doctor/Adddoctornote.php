@@ -13,20 +13,45 @@
       
     $currentDate = date("Y-m-d");
     if (isset($_SESSION['logged_username'])) {
-    $username = $_SESSION['logged_username'];
-    $user_id = $_SESSION['logged_id'];
+        $username = $_SESSION['logged_username'];
+        $user_id = $_SESSION['logged_id'];
 
-    try{
-        $conn = conn::getConnection();
-        $sql = "SELECT `doc_id` FROM `doctor` WHERE `user_id` = :user_id";
-        $query = $conn->prepare($sql);
-        $query->execute([':user_id' => $user_id]);
-        $doctor_data = $query->fetch(PDO::FETCH_ASSOC);
-        $doc_id = $doctor_data['doc_id'];
-    } catch (Exception $e){
-        echo 'Error connecting to database: ' . $e->getMessage();
+        try{
+            $conn = conn::getConnection();
+            $sql = "SELECT `doc_id` FROM `doctor` WHERE `user_id` = :user_id";
+            $query = $conn->prepare($sql);
+            $query->execute([':user_id' => $user_id]);
+            $doctor_data = $query->fetch(PDO::FETCH_ASSOC);
+            $doc_id = $doctor_data['doc_id'];
+        } catch (Exception $e){
+            echo 'Error connecting to database: ' . $e->getMessage();
+        }
     }
+
+    function updatePatientCategory($connection, $glucoseLevelString, $patient_id) {
+        $glucoseLevel = intval(preg_replace('/[^0-9]/', '', $glucoseLevelString)); 
+    
+        $category = 3;
+        if ($glucoseLevel > 180) {
+            $category = 1;
+        } elseif ($glucoseLevel >= 126 && $glucoseLevel <= 180) {
+            $category = 2;
+        }
+    
+        $query = "UPDATE `patient` SET `category_id` = :category WHERE `patient_id` = :pId";
+        $statement = $connection->prepare($query);
+        $statement->bindParam(':category', $category, PDO::PARAM_INT);
+        $statement->bindParam(':pId', $patient_id, PDO::PARAM_INT);
+        $statement->execute();
+    
+        if ($statement->rowCount() > 0) {
+            echo "Patient category updated successfully.";
+        } else {
+            echo "Failed to update patient category.";
+        }
+        $statement->closeCursor();
     }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -248,6 +273,7 @@
                                             VALUES (:bp_s, :bp_d, :pulse, :glucose, :concerns, :condition, :instruction, :note, :appointmentId)";
                             $queryRecords = $conn->prepare($sqlVRecords);
                             $success = $queryRecords->execute([':bp_s' => $bp_s, ':bp_d' => $bp_d, ':pulse' => $pulse, ':glucose' =>$glucose, ':concerns'=> $concern, ':condition'=> $condition, ':instruction'=>$inst, ':note'=> $note, ':appointmentId'=> $appointmentId]);
+                            updatePatientCategory($conn,$glucose,$patient_id);
                             if(!$success){
                                 echo "Failed to insert visit record.";
                             }
@@ -257,6 +283,7 @@
                                         VALUES (:date,:type,:status,:pId,:docId)";
                             $queryInsertAppointment = $conn->prepare($sqlInsertAppointment);
                             $success = $queryInsertAppointment->execute([':date' => $currentDate, ':type' => $appointmentType ,':status' => "Confirm", ':pId' => $patient_id, ':docId' => $doc_id]);
+                            updatePatientCategory($conn,$glucose,$patient_id);
                             if(!$success){
                                echo "Failed to insert appointment.";
                             }
@@ -282,6 +309,8 @@
                             if(!$success){
                                 echo "Failed to add next appointment.";
                             }
+
+                            
                             $_SESSION['patient_added_success'] = true;
                             header("Location: DoctorPatientView.php?patientId=".$patient_id);
                             exit;
