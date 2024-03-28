@@ -8,6 +8,14 @@
   } else {
     echo "Prescription ID not provided!";
   }
+
+  if(!isset($_SESSION['logged_username'])) {
+    header("Location: logout.php");
+    exit; 
+   } 
+  $logged_username = $_SESSION['logged_username'];
+  $role = $_SESSION['logged_role']; 
+  
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,7 +42,7 @@
 <!--=============== CSS ===============-->
 <link rel="stylesheet" href="../Css/Modalpopup.css">
 <link rel="stylesheet" href="../Css/PharamacyPrescription.css">
-
+<link rel="icon" type="imag/jpg" href="../Images/Icons/Dieabatecare.png">
 
 </head>
 
@@ -53,7 +61,7 @@
                     <a href="PharamacyInventory.php" class="nav_link"> <i class='bx bx-user nav_icon'></i> <span class="nav_name">Inventory</span> </a> 
                     <a href="PharamcyAddDrug.php" class="nav_link"> <i class='bx bx-message-square-detail nav_icon'></i> <span class="nav_name">Add Drugs</span> </a> 
                 </div>
-            </div> <a href="Pharmacy.php" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">Sign Out</span> </a>
+            </div> <a href="logout.php" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">Sign Out</span> </a>
         </nav>
     </div>
     <!--Container Main start-->
@@ -129,6 +137,7 @@
         $query->execute([':p_status'=> "Confirm", ':precriptionId' => $precriptionId]);
     
         $_SESSION['prescription_confirmed_success'] = true;
+        log_audit_trail("Prescription Manage", "Confirmed Prescription with DI: " .$p_id, $logged_username,$role);
         echo '<div class="alert alert-success" style="position: fixed; top: 10%; left: 50%; transform: translate(-50%, -50%); z-index: 999;" role="alert">Prescription successfully confirmed!</div>';
         header("Refresh: 2; URL=PharamacyHome.php");
         ob_end_flush();

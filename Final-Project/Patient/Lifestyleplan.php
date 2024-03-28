@@ -3,7 +3,6 @@
   require_once ('../data/conn.php');
 	require_once('../data/methods.php');
   $patient_id = $_SESSION['logged_patientId'];
-echo $patient_id;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,7 +33,7 @@ echo $patient_id;
 </head>
 
 
-<body id="body-pd" style="background-image:url(../Images/images/bg2.jpg); background-size: 100% auto; "> 
+<body id="body-pd" style="background-image:url(../Images/images/bg23.jpg); background-size: 100% auto; "> 
 <header class="header" id="header" style="background-color: #F0F1F3; margin-top:-2px;">
     <div class="header_toggle"><i class='bx bx-menu' id="header-toggle"></i></div>
 </header>
@@ -48,16 +47,17 @@ echo $patient_id;
                     <a href="Labresult.php" class="nav_link"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-pulse" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M10 1.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5zm-5 0A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5v1A1.5 1.5 0 0 1 9.5 4h-3A1.5 1.5 0 0 1 5 2.5zm-2 0h1v1H3a1 1 0 0 0-1 1V14a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V3.5a1 1 0 0 0-1-1h-1v-1h1a2 2 0 0 1 2 2V14a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3.5a2 2 0 0 1 2-2m6.979 3.856a.5.5 0 0 0-.968.04L7.92 10.49l-.94-3.135a.5.5 0 0 0-.895-.133L4.232 10H3.5a.5.5 0 0 0 0 1h1a.5.5 0 0 0 .416-.223l1.41-2.115 1.195 3.982a.5.5 0 0 0 .968-.04L9.58 7.51l.94 3.135A.5.5 0 0 0 11 11h1.5a.5.5 0 0 0 0-1h-1.128z"/></svg><span class="nav_name">Lab Results</span> </a> 
                     <a href="Lifestyleplan.php" class="nav_link"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/></svg><span class="nav_name">Life Style Plan</span> </a> <a href="#" class="nav_link"></div>
             </div> 
-                    <a href="PatientLogin.php" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">SignOut</span> </a>
+                    <a href="logout.php" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">SignOut</span> </a>
                    
         </nav>
     </div>
     <!--Container Main start-->
-   
+    <br>
         
-    <div class="container">
+    <div class="container" style="width: auto;">
     <div class="row" style="margin-left: 11px;">
-        <H2 style="-webkit-text-stroke: 1px black; color:white">Life Style Plan</H2>
+    <br><br><br>
+        <H2 style="-webkit-text-stroke: 1px black; color:black">Life Style Plan</H2>
     </div>
     <?php
 try {
@@ -88,7 +88,7 @@ try {
 }
 ?>
 <div class="row">
-    <div class="col-md-7 mx-4 d-flex " style="background-color: white; border-radius:18px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
+    <div class="col-md-7 mx-4 d-flex " style="background-color: white; border-radius:18px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;width: -webkit-fill-available;">
         <div class="row py-4 px-4">
             <h4 style="color: black;"><b>Dietary Plan</b></h4>
             <div class="d-flex">
@@ -194,10 +194,7 @@ try {
             </div>
             </div>
 
-
-
-
-            <div class="col-md-7 mx-4 d-flex "style="background-color: white; border-radius:18px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; margin-top:20px">
+            <div class="col-md-7 mx-4 d-flex "style="background-color: white; border-radius:18px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; margin-top:20px;width: -webkit-fill-available;">
             <div class="row py-4 px-4">
             <H4 style="color: black;"><b>Activity Plan</b></H4>
             <div class="d-flex flex-wrap">

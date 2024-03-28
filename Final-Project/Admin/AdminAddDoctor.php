@@ -1,7 +1,14 @@
 <?php
-	session_start();
-	require_once ('../data/conn.php');
-	require_once('../data/methods.php');
+  session_start();
+  require_once('../data/conn.php');
+  require_once ('../data/methods.php');
+  if(!isset($_SESSION['logged_username'])) {
+    header("Location: logout.php");
+    exit; 
+  }
+  $logged_username = $_SESSION['logged_username'];
+  $role = $_SESSION['logged_role']; 
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,6 +23,7 @@
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
         <link rel="stylesheet" href="../Css/AddUser.Css">
         <link rel="stylesheet" href="../Css/Adduserform.css">
+		<link rel="icon" type="imag/jpg" href="../Images/Icons/Dieabatecare.png">
 </head>
 
 <body>
@@ -84,43 +92,56 @@
 
 	<?php
 
-if (isset($_POST["btnSubmit"])){
-	$name = $_POST["name"];
-	$staffid = $_POST["staffid"];
-	$sp = $_POST["specialization"];
-	$number = $_POST["number"];
-	$username = $_POST["username"];
-	$password = $_POST["password"];
+		if (isset($_POST["btnSubmit"])){
+			$name = $_POST["name"];
+			$staffid = $_POST["staffid"];
+			$sp = $_POST["specialization"];
+			$number = $_POST["number"];
+			$username = $_POST["username"];
+			$password = $_POST["password"];
 
-	$salt = random_bytes(22);
-	$hashed_password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
+			$salt = random_bytes(22);
+			$hashed_password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
 
-	try{
-		$conn = conn::getConnection();
-		$query = $conn->prepare("INSERT INTO `user`
-				(`username`, `password`, `role`) 
-				VALUES 
-				(:username, :password, :role)");
-		$query->execute([':username' => $username, ':password' => $hashed_password, ':role' => "doctor"]);
-		
-		$user_id = $conn->lastInsertId();  
-		$query1 = $conn->prepare("INSERT INTO `doctor`
-				(`staff_id`, `name`, `contact`, `specialization`,`user_id`) 
-				VALUES 
-				(:staffid,:name,:contact,:sp,:userid)");
-		$query1->execute([':staffid' => $staffid, ':name' => $name, ':contact' => $number,':sp'=> $sp, ':userid' => $user_id]);
-		//log_audit_trail("Add Account", "Created recptionit id " .$user_id. " account", $logged_username);
-		header("Location: AdminManageUserDoctor.php");
+			try{
+				$conn = conn::getConnection();
+
+				if (!isUniqueStaffIDDoc($conn, $staffid)) {
+					echo "<script>alert('Staff ID already exists. Please choose a different one.');</script>";
+					header("Refresh: 2");
+					exit;
+				}
+				
+				if (!isUniqueUsername($conn, $username)) {
+					echo "<script>alert('Username already exists. Please choose a different one.');</script>";
+					header("Refresh: 2");
+					exit;
+				}
+
+				$query = $conn->prepare("INSERT INTO `user`
+						(`username`, `password`, `role`) 
+						VALUES 
+						(:username, :password, :role)");
+				$query->execute([':username' => $username, ':password' => $hashed_password, ':role' => "doctor"]);
+				
+				$user_id = $conn->lastInsertId();  
+				$query1 = $conn->prepare("INSERT INTO `doctor`
+						(`staff_id`, `name`, `contact`, `specialization`,`user_id`) 
+						VALUES 
+						(:staffid,:name,:contact,:sp,:userid)");
+				$query1->execute([':staffid' => $staffid, ':name' => $name, ':contact' => $number,':sp'=> $sp, ':userid' => $user_id]);
+				log_audit_trail("Add Account", "Created Doctor User with ID: " .$user_id, $logged_username,$role);
+				header("Location: AdminManageUserDoctor.php");
 
 
-	} catch(Exception $e){
-		echo 'Erro: ' .$e->getMessage();
-	}
-}
+			} catch(Exception $e){
+				echo 'Erro: ' .$e->getMessage();
+			}
+		}
 
 
 
-?>
+	?>
 
   </div>
 

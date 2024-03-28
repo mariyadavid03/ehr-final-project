@@ -5,6 +5,13 @@
 
 	$userType = $_GET['type'];
 	$id = $_GET['id'];
+
+	if(!isset($_SESSION['logged_username'])) {
+		header("Location: logout.php");
+		exit; 
+	   } 
+	  $logged_username = $_SESSION['logged_username'];
+	  $role = $_SESSION['logged_role']; 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,6 +26,7 @@
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
         <link rel="stylesheet" href="../Css/AddUser.Css">
         <link rel="stylesheet" href="../Css/Adduserform.css">
+		<link rel="icon" type="imag/jpg" href="../Images/Icons/Dieabatecare.png">
 </head>
 
 <body>
@@ -51,7 +59,7 @@
 					break;
 
 				default:
-					header("Location: error.php");
+					header("Location: Admin .php");
 					exit;
 			}
 			$stmt = $conn->prepare($sql);
@@ -68,7 +76,23 @@
   <div class="wrapper">
     <div class="row">
       <div class="col-6 button-column">
-        <a href="../Admin/AdminManageUserPharmecy.php" class="btn btn-danger active" style="background-color: red; color: white" role="button" aria-pressed="true">Back</a>
+
+        <?php
+			switch ($userType){
+				case 'pharamacist':
+					echo '<a href="AdminManageUserPharmecy.php" class="btn btn-danger active" style="background-color: red; color: white" role="button" aria-pressed="true">Back</a>';
+					break;
+				case 'receptionist':
+					echo '<a href="AdminManageUserRec.php" class="btn btn-danger active" style="background-color: red; color: white" role="button" aria-pressed="true">Back</a>';
+					break;
+				case 'lab':
+					echo '<a href="AdminManageUserLab.php" class="btn btn-danger active" style="background-color: red; color: white" role="button" aria-pressed="true">Back</a>';
+					break;
+				default:
+					header("Location: Admin.php");
+					exit;
+			}
+		?>
       </div>
     </div>
 
@@ -175,15 +199,13 @@
 							header("Location: AdminManageUserLab.php");
 							break;
 					default:
-						header("Location: error.php");
+						header("Location: Admin .php");
 						exit;
 				}
 				
 				
 				
 				
-
-			//log_audit_trail("Update Account", "Edited user id " .$id. " account", $logged_username);
 
 
 

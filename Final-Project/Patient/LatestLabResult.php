@@ -4,6 +4,7 @@
     require_once('../data/methods.php');
     if (isset($_GET['resultId'])) {
         $resultId = $_GET['resultId'];
+    
 
         try{
             $conn = conn::getConnection();
@@ -24,6 +25,8 @@
     
     } else {
         echo "Prescription ID not provided";
+        header("Location: PatientHome.php");
+        exit;
     }
 
 ?>
@@ -55,12 +58,12 @@
 
 </head>
 
-<body id="body-pd" style="background-image:url(../Images/images/bg2.jpg); background-size: 100% ;  background-repeat: no-repeat;  /* Prevent image tiling */
+<body id="body-pd" style="background-image:url(../Images/images/bg23.jpg); background-size: 100% ;  background-repeat: no-repeat;  
   background-attachment: fixed;  
   background-size: cover;        
   height: 100vh;">    
 <header class="header" id="header" style="background-color: rgba(240, 241, 243, 0); ">
-<a href="#">
+<a href="PatientHome.php">
 <svg xmlns="http://www.w3.org/2000/svg" width="65" height="65" fill="purple" class="bi bi-arrow-left-short" viewBox="0 0 16 16">
   <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5"/>
 </svg>
@@ -70,17 +73,17 @@
     <!--Container Main start-->
    
         
-    <div class="container">
-    <div class="row" style="margin-left: 11px;">
-        <H2 style="-webkit-text-stroke: 1px black; color:white">Latest Lab Result</H2>
+    <div class="container" style="width: fit-content;">
+    <div class="row" style="margin-left: 11px; ">
+        <H2 style="-webkit-text-stroke: 1px black; color:black">Latest Lab Result</H2>
     </div>
 
     <!-- first row-->
     <div class="row">
-            <div class="col-md-6 mx-4 d-flex justify-content-center "style="background-color: white; border-radius:18px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
+            <div class="col-md-6 mx-4 d-flex justify-content-center "style="background-color: white; border-radius:18px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;width: 150%;">
                 
             <div class="row py-4  text-center">
-                <H5 style="color: black;"><B>Latest Lab Result Details</B></H5>
+                <H5 style="color: black;padding-bottom:40px;"><B>Latest Lab Result Details</B></H5>
                 <br>
                 <br>
                 <div class="row d-flex " style="text-align: left;">
@@ -133,19 +136,6 @@
                         </div>    
                     </div>
                        
-                       
-                        
-                        
-                    
-                      
-                        
-                        
-                       
-                       
-                        
-                       
-
-                        
                         
                     </div>
                     </div>
@@ -183,16 +173,16 @@
         width: auto;
         height: 15px;
     }
-    @media (max-width: 767px) { /* Target screens smaller than 768px (sm breakpoint) */
-    .col-md-6{  /* Target the outer col-md-6 element */
-      flex-direction: column; /* Stack the divs vertically on mobile */
+    @media (max-width: 767px) { 
+    .col-md-6{  
+      flex-direction: column; 
     }
     .col-md-5 {
-    margin-left: 0px;  /* Remove margin-left on mobile devices */
+    margin-left: 0px; 
     }
     .col-md-5 {
-    margin-left: 0px;  /* Remove left margin for better centering */
-    margin-right: 0px; /* Remove right margin */
+    margin-left: 0px;  
+    margin-right: 0px; 
     }
     .container {
     margin-left: -1.5rem;

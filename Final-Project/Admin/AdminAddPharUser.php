@@ -1,7 +1,13 @@
 <?php
-	session_start();
-	require_once ('../data/conn.php');
-	require_once('../data/methods.php');
+	  session_start();
+	  require_once('../data/conn.php');
+	  require_once ('../data/methods.php');
+	  if(!isset($_SESSION['logged_username'])) {
+		header("Location: logout.php");
+		exit; 
+	   } 
+	  $logged_username = $_SESSION['logged_username'];
+		$role = $_SESSION['logged_role']; 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,6 +22,7 @@
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
         <link rel="stylesheet" href="../Css/AddUser.Css">
         <link rel="stylesheet" href="../Css/Adduserform.css">
+		<link rel="icon" type="imag/jpg" href="../Images/Icons/Dieabatecare.png">
 </head>
 
 <body>
@@ -90,6 +97,18 @@
 
 			try{
 				$conn = conn::getConnection();
+				if (!isUniqueStaffIDPharamacist($conn, $staffid)) {
+					echo "<script>alert('Staff ID already exists. Please choose a different one.');</script>";
+					header("Refresh: 3");
+					exit;
+				}
+				
+				if (!isUniqueUsername($conn, $username)) {
+					echo "<script>alert('Username already exists. Please choose a different one.');</script>";
+					header("Refresh: 3");
+					exit;
+				}
+				
 				$query = $conn->prepare("INSERT INTO `user`
 						(`username`, `password`, `role`) 
 						VALUES 
@@ -102,7 +121,7 @@
 						VALUES 
 						(:staffid,:name,:contact,:userid)");
 				$query1->execute([':staffid' => $staffid, ':name' => $name, ':contact' => $number, ':userid' => $user_id]);
-				//log_audit_trail("Add Account", "Created recptionit id " .$user_id. " account", $logged_username);
+				log_audit_trail("Add Account", "Created Lab User with ID: " .$user_id, $logged_username,$role);
 				header("Location: AdminManageUserPharmecy.php");
 
 

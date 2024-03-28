@@ -17,7 +17,8 @@
             echo 'Error connecting to database: ' . $e->getMessage();
         }
     } else {
-        echo "Appointment ID not provided.";
+        header("Location: PatientHome.php");
+        exit; 
     }
 ?>
 <!DOCTYPE html>
@@ -25,7 +26,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Patient Home</title>
+    <title>View Visit Record</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -46,16 +47,12 @@
 <link rel="stylesheet" href="../Css/Modalpopup.css">
 <link rel="stylesheet" href="../Css/ReciptionHome.css">
 
-</head>
-
-<body id="body-pd" style="background-image:url(../Images/images/BG.jpg); background-size: 100% auto;"> 
-
 
 </head>
 
-<body id="body-pd" style="background-image:url(../Images/images/bg2.jpg); background-size: 100% auto; "> 
+<body id="body-pd" style="background-image:url(../Images/images/bg23.jpg); background-size: 100% auto; padding:0%; "> 
     <header class="header" id="header" style="background-color: rgba(240, 241, 243, 0); ">
-        <a href="#">
+        <a href="../Patient/VisitsRecords.php">
             <svg xmlns="http://www.w3.org/2000/svg" width="65" height="65" fill="purple" class="bi bi-arrow-left-short" viewBox="0 0 16 16">
                 <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5"/>
             </svg>
@@ -85,9 +82,9 @@
 
    ?>
         
-    <div class="container">
+    <div class="container" style="max-width: fit-content; padding-left: 20%;">
     <div class="row" style="margin-left: 11px;">
-        <H2 style="-webkit-text-stroke: 1px black; color:white">Doctor Note</H2>
+        <H2 style="-webkit-text-stroke: 1px black; color:black; margin-bottom: 40px;">Doctor Note</H2>
     </div>
 
     <!-- first row-->
@@ -238,44 +235,44 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.bundle.min.js"></script> 
     
     <style>
-        .table-wrapper {
-    overflow-y: auto;
-    }  
-    .container {
-    margin-left: 3rem;
-    margin-right: 1rem;}
+                .table-wrapper {
+            overflow-y: auto;
+            }  
+            .container {
+            margin-left: 3rem;
+            margin-right: 1rem;}
 
-    #latestlabre{
-        width: auto;
-        height: 15px;
-    }
-    @media (max-width: 767px) { /* Target screens smaller than 768px (sm breakpoint) */
-    .col-md-6{  /* Target the outer col-md-6 element */
-      flex-direction: column; /* Stack the divs vertically on mobile */
-    }
-    .col-md-5 {
-    margin-left: 0px;  /* Remove margin-left on mobile devices */
-    }
-    .col-md-5 {
-    margin-left: 0px;  /* Remove left margin for better centering */
-    margin-right: 0px; /* Remove right margin */
-    }
-    .container {
-    margin-left: -1.5rem;
-    }
-  
-    }
+            #latestlabre{
+                width: auto;
+                height: 15px;
+            }
+            @media (max-width: 767px) { 
+            .col-md-6{ 
+            flex-direction: column; 
+            }
+            .col-md-5 {
+            margin-left: 0px;
+            }
+            .col-md-5 {
+            margin-left: 0px; 
+            margin-right: 0px; 
+            }
+            .container {
+            margin-left: -1.5rem;
+            }
+        
+            }
 
 
-    #functions {
-    transition: transform 190ms ease-out;
+            #functions {
+            transition: transform 190ms ease-out;
 
-    }
+            }
 
-    #functions:hover {
-    transform: translate(0px, 0px) scale(1.1, 1.2);
-    }
-</style>
+            #functions:hover {
+            transform: translate(0px, 0px) scale(1.1, 1.2);
+            }
+    </style>
     
 </body>
 </html>

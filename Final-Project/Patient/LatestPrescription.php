@@ -25,6 +25,8 @@ if (isset($_GET['presId'])) {
     }
 } else {
     echo "Prescription ID not provided";
+    header("Location: PatientHome.php");
+        exit;
 }
 ?>
 <!DOCTYPE html>
@@ -54,7 +56,7 @@ if (isset($_GET['presId'])) {
 
 </head>
 
-<body id="body-pd" style="background-image:url(../Images/images/bg2.jpg); background-size: 100% ;  background-repeat: no-repeat;  /* Prevent image tiling */
+<body id="body-pd" style="background-image:url(../Images/images/bg23.jpg); background-size: 100% ;  background-repeat: no-repeat; 
   background-attachment: fixed;  
   background-size: cover;        
   height: 100vh;">    
@@ -65,13 +67,13 @@ if (isset($_GET['presId'])) {
 </svg>
 </a>
 </header> 
-<div class="container" style="margin-top: -15px;">
+<div class="container" style="margin-top: -15px;width: auto;">
   <br>
   <br>
   <br>
   
     <div class="row" >
-        <H2 style="-webkit-text-stroke: 1px black; color:white">Latest Prescription</H2>
+        <H2 style="-webkit-text-stroke: 1px black; color:black;">Latest Prescription</H2>
     </div>
     <div class="bg-white"  style=" box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;border: 1px solid #41A5EE;">
 

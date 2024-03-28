@@ -1,7 +1,14 @@
 <?php
 	session_start();
+	require_once('../data/conn.php');
 	require_once ('../data/conn.php');
-	require_once('../data/methods.php');
+		if(!isset($_SESSION['logged_username'])) {
+			header("Location: logout.php");
+			exit; 
+		}
+	$logged_username = $_SESSION['logged_username'];
+	$role = $_SESSION['logged_role']; 
+	
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,19 +17,20 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Doctor</title>
+    <title>Add Admin</title>
     <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
         <link rel="stylesheet" href="../Css/AddUser.Css">
         <link rel="stylesheet" href="../Css/Adduserform.css">
+		<link rel="icon" type="imag/jpg" href="../Images/Icons/Dieabatecare.png">
 </head>
 
 <body>
   <div class="wrapper">
     <div class="row">
       <div class="col-6 button-column">
-        <a href="AdminManageUserDoctor.php" class="btn btn-danger active" style="background-color: red; color: white" role="button" aria-pressed="true">Back</a>
+        <a href="AdminManageUserAdmin.php" class="btn btn-danger active" style="background-color: red; color: white" role="button" aria-pressed="true">Back</a>
       </div>
     </div> 
 
@@ -39,7 +47,7 @@
 	  <div class="form-group">
 	  	<label for="email">Staff ID:</label>
 	  	<div class="relative">
-		  	<input class="form-control" type="text" name="staffid" maxlength="8"  placeholder="Staff ID Number" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required>
+		  	<input class="form-control" type="text" name="staffid" maxlength="8"  placeholder="Staff ID Number eg. A-123456" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required>
 		  	<i class="fa fa-envelope"></i>
 	  	</div>
 	  </div>
@@ -85,39 +93,55 @@
 
 	<?php
 
-if (isset($_POST["btnSubmit"])){
-	$name = $_POST["name"];
-	$staffid = $_POST["staffid"];
-	$email = $_POST["email"];
-	$number = $_POST["number"];
-	$username = $_POST["username"];
-	$password = $_POST["password"];
+		if (isset($_POST["btnSubmit"])){
+			$name = $_POST["name"];
+			$staffid = $_POST["staffid"];
+			$email = $_POST["email"];
+			$number = $_POST["number"];
+			$username = $_POST["username"];
+			$password = $_POST["password"];
 
-	$salt = random_bytes(22);
-	$hashed_password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
+			$salt = random_bytes(22);
+			$hashed_password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
 
-	try{
-		$conn = conn::getConnection();
-		$query = $conn->prepare("INSERT INTO `user`
-				(`username`, `password`, `role`) 
-				VALUES 
-				(:username, :password, :role)");
-		$query->execute([':username' => $username, ':password' => $hashed_password, ':role' => "admin"]);
-		
-		$user_id = $conn->lastInsertId();  
-		$query1 = $conn->prepare("INSERT INTO `admin`
-				(`staff_id`, `name`, `contact`, `email`,`user_id`) 
-				VALUES 
-				(:staffid,:name,:contact,:email,:userid)");
-		$query1->execute([':staffid' => $staffid, ':name' => $name, ':contact' => $number,':email'=> $email, ':userid' => $user_id]);
-		//log_audit_trail("Add Account", "Created recptionit id " .$user_id. " account", $logged_username);
-		header("Location: AdminManageUserAdmin.php");
+			
+
+		try{
+			$conn = conn::getConnection();
+
+			if (!isUniqueStaffIDAdmin($conn, $staffid)) {
+				echo "<script>alert('Staff ID already exists. Please choose a different one.');</script>";
+				header("Refresh: 3");
+				exit;
+			}
+			
+			if (!isUniqueUsername($conn, $username)) {
+				echo "<script>alert('Username already exists. Please choose a different one.');</script>";
+				header("Refresh: 3");
+				exit;
+			}
 
 
-	} catch(Exception $e){
-		echo 'Erro: ' .$e->getMessage();
+			$query = $conn->prepare("INSERT INTO `user`
+					(`username`, `password`, `role`) 
+					VALUES 
+					(:username, :password, :role)");
+			$query->execute([':username' => $username, ':password' => $hashed_password, ':role' => "admin"]);
+			
+			$user_id = $conn->lastInsertId();  
+			$query1 = $conn->prepare("INSERT INTO `admin`
+					(`staff_id`, `name`, `contact`, `email`,`user_id`) 
+					VALUES 
+					(:staffid,:name,:contact,:email,:userid)");
+			$query1->execute([':staffid' => $staffid, ':name' => $name, ':contact' => $number,':email'=> $email, ':userid' => $user_id]);
+			log_audit_trail("Add Account", "Created Admin Account with ID: " .$user_id, $logged_username,$role);
+			header("Location: AdminManageUserAdmin.php");
+
+
+		} catch(Exception $e){
+			echo 'Erro: ' .$e->getMessage();
+		}
 	}
-}
 
 
 

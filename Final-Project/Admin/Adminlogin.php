@@ -22,6 +22,8 @@ if(isset($_POST["btnLogin"])){
             $_SESSION['logged_id'] = $user['user_id'];
             $_SESSION['logged_username'] = $username;
             $_SESSION['logged_role'] = $user['role']; 
+            $role = $_SESSION['logged_role'];
+            $logged_username = $_SESSION['logged_username'];
 
             if (isset($_SESSION['logged_username'])) {
                 if (!isset($_SESSION['online_users_count'])) {
@@ -29,7 +31,7 @@ if(isset($_POST["btnLogin"])){
                 }
                 $_SESSION['online_users_count']++;
             }
-            
+            log_audit_trail("User Login", " - ", $logged_username,$role); 
             header("Location: Admin .php");
             exit;
         } else {
@@ -53,6 +55,7 @@ if(isset($_POST["btnLogin"])){
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <link rel="stylesheet" href="../Css/Adminlogin.css">
+    <link rel="icon" type="imag/jpg" href="../Images/Icons/Dieabatecare.png">
 </head>
 <body>
     <div class="container">

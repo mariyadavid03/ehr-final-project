@@ -33,7 +33,7 @@ $patient_id = $_SESSION['logged_patientId'];
 
 </head>
 
-<body id="body-pd" style="background-image:url(../Images/images/BG.jpg); background-size: 100% auto;"> 
+<body id="body-pd" style="background-image:url(../Images/images/bg23.jpg); background-size: 100% auto;"> 
 <header class="header" id="header" style="background-color: #F0F1F3;">
     <div class="header_toggle"><i class='bx bx-menu' id="header-toggle"></i></div>
 </header>
@@ -48,7 +48,7 @@ $patient_id = $_SESSION['logged_patientId'];
                     <a href="Labresult.php" class="nav_link"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-pulse" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M10 1.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5zm-5 0A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5v1A1.5 1.5 0 0 1 9.5 4h-3A1.5 1.5 0 0 1 5 2.5zm-2 0h1v1H3a1 1 0 0 0-1 1V14a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V3.5a1 1 0 0 0-1-1h-1v-1h1a2 2 0 0 1 2 2V14a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3.5a2 2 0 0 1 2-2m6.979 3.856a.5.5 0 0 0-.968.04L7.92 10.49l-.94-3.135a.5.5 0 0 0-.895-.133L4.232 10H3.5a.5.5 0 0 0 0 1h1a.5.5 0 0 0 .416-.223l1.41-2.115 1.195 3.982a.5.5 0 0 0 .968-.04L9.58 7.51l.94 3.135A.5.5 0 0 0 11 11h1.5a.5.5 0 0 0 0-1h-1.128z"/></svg><span class="nav_name">Lab Results</span> </a> 
                     <a href="Lifestyleplan.php" class="nav_link"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/></svg><span class="nav_name">Life Style Plan</span> </a> <a href="#" class="nav_link"></div>
             </div> 
-                    <a href="PatientLogin.php" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">SignOut</span> </a>
+                    <a href="logout.php" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">SignOut</span> </a>
                    
         </nav>    
         </nav>
@@ -74,15 +74,15 @@ $patient_id = $_SESSION['logged_patientId'];
           
         ?>
         
-    <div class="container">
+    <div class="container" style="width: auto;">
     <div class="row" >
-        <H2 style="-webkit-text-stroke: 1px black; color:white">Lab Result</H2>
+        <H2 style="-webkit-text-stroke: 1px black; color:black; margin-top:20px;margin-bottom:20px;">Lab Result</H2>
     </div>
     <div class="bg-white"  style=" box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px; border-radius:16px">
 
             <div class="table-responsive">
             
-            <div class="table-wrapper" style="height: 500px;">
+            <div class="table-wrapper" style="height: 400px;">
                 <table id="mytable" class="table table-bordred table-striped table table-fixed">              
                                
                     <thead>
@@ -119,13 +119,6 @@ $patient_id = $_SESSION['logged_patientId'];
     </div>
 
     </div>
-   
-
-
-
-
-                       
-
 <br>
 <br>       
     
@@ -144,7 +137,7 @@ $patient_id = $_SESSION['logged_patientId'];
     .container {
     margin-left: 3rem;
     margin-right: 1rem;}
-    @media (max-width: 767px) { /* Target screens smaller than 768px (sm breakpoint) */
+    @media (max-width: 767px) { 
     .container {
     margin-left: -0.5rem;
 

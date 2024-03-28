@@ -2,6 +2,12 @@
     session_start();
     require_once ('../data/conn.php');
 	require_once('../data/methods.php');
+    if(!isset($_SESSION['logged_username'])) {
+        header("Location: logout.php");
+        exit; 
+       } 
+      $logged_username = $_SESSION['logged_username'];
+      $role = $_SESSION['logged_role']; 
     ob_start();
 ?>
 <!DOCTYPE html>
@@ -12,6 +18,7 @@
     <title>Patient Registration</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="../Css/Reciption P reg.css">
+    <link rel="icon" type="imag/jpg" href="../Images/Icons/Dieabatecare.png">
 </head>
 <body>
 <header class="row py-3" style="background-color: dodgerblue;">
@@ -356,6 +363,7 @@
                 $sHistoryQuery->execute([':occupation'=> $ocuupation, ':eduLevel'=> $eduLevel, ':hId'=> $historyId]);
 
                 $_SESSION['patient_added_success'] = true;
+                log_audit_trail("Patient Registertaion", "Registered a Patient with ID: ". $patient_id, $logged_username,$role); 
                 echo '<script>
                     setTimeout(function() {
                         window.location.href = "ReciptionHome.php";

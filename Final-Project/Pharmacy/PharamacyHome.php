@@ -3,6 +3,10 @@ session_start();
 require_once('../data/conn.php');
 require_once('../data/methods.php');
 
+if(!isset($_SESSION['logged_username'])) {
+    header("Location: logout.php");
+    exit; 
+   } 
 
 ?>
 
@@ -20,6 +24,7 @@ require_once('../data/methods.php');
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="../Css/Modalpopup.css">
     <link rel="stylesheet" href="../Css/PharamacyHome.css">
+    <link rel="icon" type="imag/jpg" href="../Images/Icons/Dieabatecare.png">
 </head>
 <body id="body-pd"> 
     <?php

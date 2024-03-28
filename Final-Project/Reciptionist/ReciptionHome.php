@@ -34,7 +34,7 @@
 <!--=============== CSS ===============-->
 <link rel="stylesheet" href="../Css/Modalpopup.css">
 <link rel="stylesheet" href="../Css/ReciptionHome.css">
-
+<link rel="icon" type="imag/jpg" href="../Images/Icons/Dieabatecare.png">
 
 </head>
 
@@ -88,7 +88,7 @@
                     <a href="PReg1.php" class="nav_link"> <i class='bx bx-user nav_icon'></i> <span class="nav_name">Register</span> </a> 
 
                 </div>
-            </div> <a href="RecipLogin.php" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">SignOut</span> </a>
+            </div> <a href="logout.php" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">SignOut</span> </a>
         </nav>
     </div>
     <!--Container Main start-->

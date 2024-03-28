@@ -2,6 +2,8 @@
     ob_start();
     session_start();
     require_once('../data/conn.php');
+
+    //error reporting for debugging
     error_reporting(E_ALL); 
     ini_set('display_errors', 1);
 
@@ -12,6 +14,8 @@
       }
       
     $currentDate = date("Y-m-d");
+
+    //Getting logged in user's details
     if (isset($_SESSION['logged_username'])) {
         $username = $_SESSION['logged_username'];
         $user_id = $_SESSION['logged_id'];
@@ -61,12 +65,12 @@
     <title>Add Appointment Notes</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="stylesheet" href="../Css/Reciption P reg.css">
-<!-- Link jQuery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css" rel="stylesheet">
-
-<!-- Link Bootstrap JS (including Popper.js) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Link jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="icon" type="imag/jpg" href="../Images/Icons/Dieabatecare.png">
+    <!-- Link Bootstrap JS (including Popper.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 
 
 </head>
@@ -79,6 +83,7 @@
       <h2 class="text-white mb-0"><b>Add Doctor Note</b></h2>
     </div>
   </header>
+
 <?php
     try{
         $conn = conn::getConnection();
@@ -150,12 +155,12 @@
                    </div>
                 </div>
    
-<?php
+                <?php
                     $queryTestList = $conn->prepare("SELECT `test_id`,`test_name` FROM `lab_test` ORDER BY `test_name` ASC");
                     $queryTestList->execute();
                     $testList = $queryTestList->fetchAll(PDO::FETCH_ASSOC);
 
-?>
+                ?>
    
        
                 <div class="col-md-4 py-3 " style=" background-color:#D9D9D9; margin-left:10px;">
@@ -164,12 +169,14 @@
                    </div>
                    <div class="d-flex" >
                         <div class="dropdown">
+
                             <select class="btn btn-primary" data-bs-toggle="dropdown" name="testType" id="testType" style="width:fit-content;">
                                 <option value="" style="background-color: white; color:black;text-align:left;">Select Test Type</option>
                                 <?php foreach($testList as $list) : ?>
                                 <option value="<?php echo $list['test_id']; ?>"" style="background-color: white; color:black; text-align:left;width:fit-content;"><?php echo $list['test_name']; ?></option>
                                 <?php endforeach ?>
                             </select>
+
                         </div>
                         <div>
                         <a href="#" class="btn btn-primary" style="margin-left: 8px; padding: 4px 9px 4px 9px;" onclick="addTestType()">Add</a>
@@ -186,15 +193,16 @@
         <br>
 
            <div class="row justify-content-center">
-                   <div class="col- py-3" style="background-color:#D9D9D9; width: 67%;">
-                   <div class="d-flex">
+                <div class="col- py-3" style="background-color:#D9D9D9; width: 67%;">
+                    <div class="d-flex">
                        <div class="form-group mx-1" style="width: 50%;">
                            <label for="patientNumber">Patient Condition:</label>
                            <textarea class="form-control" id="exampleFormControlTextarea1" name="condition" rows="5" style="width: 100%;" placeholder="Enter patient current condition here..."></textarea>
                        </div>
+
                        <div class="form-group" style="margin-left: 30px; width: 50%;">
-                       <label for="patientNumber">Instruction:</label>
-                       <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" name="instruction" placeholder="Enter given instructions here..." ></textarea>
+                            <label for="patientNumber">Instruction:</label>
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" name="instruction" placeholder="Enter given instructions here..." ></textarea>
                        </div>
                    </div>
                    <div class="d-flex">
@@ -203,8 +211,8 @@
                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" style="width: 100%;" name="concern" placeholder="Enter patient concerns here..."></textarea>
                        </div>
                        <div class="form-group" style="margin-left: 30px; width: 50%;">
-                       <label for="patientNumber">Note:</label>
-                       <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" name="note" placeholder="Enter other notes here..."></textarea>
+                            <label for="patientNumber">Note:</label>
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" name="note" placeholder="Enter other notes here..."></textarea>
                        </div>
                    </div>
                    <div class="d-flex">
@@ -231,13 +239,17 @@
                 $pulse = $_POST["pulseRate"];
                 $bp_s = $_POST["systolic"];
 
+                //Can be nullable varibles
                 $nextDate = isset($_POST["nextDate"]) ? $_POST["nextDate"] : null;
                 $condition = isset($_POST["condition"]) ? $_POST["condition"] : null;
                 $inst = isset($_POST["instruction"]) ? $_POST["instruction"] : null;
                 $concern = isset($_POST["concern"]) ? $_POST["concern"] : null;
                 $note = isset($_POST["note"]) ? $_POST["note"] : null;
+
+
                 $appointmentId = $appInfo['appointment_id'];
             
+                //Saving Requested Tests
                 if (isset($_POST['selectedTests']) && ($_POST['selectedTests']) != NULL){
                     foreach($_POST['selectedTests'] as $selectedTestId) {
                         try {

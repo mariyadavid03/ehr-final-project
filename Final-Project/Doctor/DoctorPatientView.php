@@ -5,6 +5,14 @@
   require_once('../data/charts/glucoseChart.php');
   require_once('../data/charts/systolicChart.php');
   require_once('../data/charts/diastolicChart.php');
+
+  if(!isset($_SESSION['logged_username'])) {
+    header("Location: logout.php");
+    exit; 
+   } 
+  $logged_username = $_SESSION['logged_username'];
+  $role = $_SESSION['logged_role']; 
+
   
   if(isset($_SESSION['patient_added_success']) && $_SESSION['patient_added_success'] == true) {
     echo '<div id="success-message" class="alert alert-success" role="alert">Visit Record successfully added!</div>';
@@ -38,6 +46,8 @@ if(isset($_SESSION['pres_added_success']) && $_SESSION['pres_added_success'] == 
     $patient_id = $_GET['patientId'];
   } else {
     echo "ID not provided!";
+    header("Location: DoctorHome.php");
+        exit; 
   }
 ?>
 <!DOCTYPE html>
@@ -67,7 +77,7 @@ if(isset($_SESSION['pres_added_success']) && $_SESSION['pres_added_success'] == 
 <!--=============== CSS ===============-->
 <link rel="stylesheet" href="../Css/DoctorPviewModal.css">
 <link rel="stylesheet" href="../Css/PrescriptionModal.css">
-
+<link rel="icon" type="imag/jpg" href="../Images/Icons/Dieabatecare.png">
 </head>
 <style>
 .table-wrapper {
@@ -160,11 +170,6 @@ if(isset($_SESSION['pres_added_success']) && $_SESSION['pres_added_success'] == 
                 </div>
             </div>
 <!--Modal end-->
-
-
-
-
-      
 
 
 <!--Prescreption View Modal start--> 
@@ -537,7 +542,7 @@ if(isset($_SESSION['pres_added_success']) && $_SESSION['pres_added_success'] == 
                 $sqlReq = $conn->prepare("INSERT INTO `test_request`(`request_date`, `status`, `test_id`, `patient_id`, `doc_id`) 
                           VALUES (:currentDate, :status, :testId, :pId, :docId )");
                 $sucees = $sqlReq->execute([':currentDate' => $currentDate, ':status' => "Pending", ':testId' => $testId, ':pId' => $patient_id, ':docId' => $doc_id]);
-    
+                
               }
             ?>
           </div>
@@ -611,16 +616,13 @@ if(isset($_SESSION['pres_added_success']) && $_SESSION['pres_added_success'] == 
         function viewPres(presId) {
             window.location.href = 'Prescriptionview.php?presId=' + presId;
         }
-
-        function viewAttach(presId) {
-
-        }
-
   </script>
+
   <script>
     setTimeout(function() {
         $('#success-message').fadeOut('slow');
     }, 3000);
+    
 </script>
   <script src="../Java Script/main.js"></script>
   <script src="../Java Script/Reciption.JS"></script>

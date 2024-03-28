@@ -5,9 +5,9 @@
     if(isset($_GET['recordId'])) {
         $record_id = $_GET['recordId'];
       } else {
-        echo "ID not provided!";
+        header("Location: DoctorPatientView.php");
+        exit; 
       }
-    
     try{
         $conn = conn::getConnection();
     } catch (Exception $e){
@@ -22,6 +22,7 @@
     <title>Add Doctor Note</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="stylesheet" href="../Css/Reciption P reg.css">
+    <link rel="icon" type="imag/jpg" href="../Images/Icons/Dieabatecare.png">
 <!-- Link jQuery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
@@ -32,21 +33,20 @@
 </head>
 <body>
 <header class="row py-3" style="background-color: dodgerblue;">
-    <div class="col text-center">
+    
+<div class="col text-center">
       <h2 class="text-white mb-0"><b>Doctor Note</b></h2>
     </div>
   </header>
-
     <div class="container">
-       
         <br>
         <br>
-       
         <div class="row">
         </div>
             <br>
 
             <?php
+                //Retriving Visit Records
                 $queryRecords = $conn->prepare("SELECT `bp_systolic`, `bp_diastolic`, `plus_rate`, `glucose_level`, `patient_concerns`, `patient_condition`, `instructions`, `note`, `appoinment_id` 
                                                 FROM `visit_record` WHERE `record_id` = :record_id");
                 $queryRecords->execute([':record_id'=> $record_id]);
@@ -58,9 +58,7 @@
                                             LEFT JOIN lab_test ON  test_request.test_id = lab_test.test_id
                                             WHERE test_request.appointment_id = :aId");
                 $queryTests->execute([':aId'=> $a_id]);
-                $tests = $queryTests->fetchAll(PDO::FETCH_ASSOC);
-
-                        
+                $tests = $queryTests->fetchAll(PDO::FETCH_ASSOC);       
             ?>
 
 
@@ -89,20 +87,27 @@
    
        
                    <div class="col-md-4 py-3 " style=" background-color:#D9D9D9; margin-left:10px;">
+                   
                    <div class="row">
                         <h4 class="mb-4 text-center"><u><b> Requested Lab Test</b></u></h4>
                    </div>
-                   <?php foreach($tests as $test) : ?>
-                    <div class="row text-center">
-                        <H4><?php echo $test['test_name']; ?></H4>
+                   <?php if (empty($tests)) : ?>
+                        <div class="row text-center">
+                            <h5>No requested tests</h5>
                         </div>
-                    <?php endforeach ?>
+                    <?php else : ?>
+                        <?php foreach($tests as $test) : ?>
+                            <div class="row text-center">
+                                <h4><?php echo $test['test_name']; ?></h4>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                    </div>       
                    </div>
                
 
            <div class="row justify-content-center" style="margin-top:10px;">
-                   <div class="col- py-3" style="background-color:#D9D9D9; width: 67%;">
+                <div class="col- py-3" style="background-color:#D9D9D9; width: 67%;">
                    <div class="d-flex">
                        <div class="form-group mx-1" style="width: 50%;">
                            <label for="patientNumber"><B>Patient Condition:</B></label>

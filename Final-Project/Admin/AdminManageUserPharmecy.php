@@ -1,8 +1,15 @@
 <?php
-  session_start();
-  require_once ('../data/conn.php');
-  require_once('../data/methods.php');
-  ob_start();
+    session_start();
+    require_once('../data/conn.php');
+    require_once ('../data/methods.php');
+    
+    if(!isset($_SESSION['logged_username'])) {
+      header("Location: logout.php");
+      exit; 
+     } 
+    $logged_username = $_SESSION['logged_username'];
+    $role = $_SESSION['logged_role']; 
+    ob_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,6 +23,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <link rel="stylesheet" href="../Css/AdminpanelManageUser.css">
+    <link rel="icon" type="imag/jpg" href="../Images/Icons/Dieabatecare.png">
 </head>
 
 <body>
@@ -50,6 +58,7 @@
         <a href="../Admin/AdminManageUserPharmecy.php" class="sidebar-link"><span>Pharmacist</span></a>
         <a href="../Admin/AdminManageUserDoctor.php" class="sidebar-link"><span>Doctor</span></a>
         <a href="../Admin/AdminManageUserRec.php" class="sidebar-link"><span>Receptionist</span></a>
+        <a href="../Admin/AdminManageUserAdmin.php" class="sidebar-link"><span>Admin</span></a>
       </div>
     </li>
     <li class="sidebar-item">
@@ -73,7 +82,7 @@
     </li>
   </ul>
   <div class="sidebar-footer">
-  <a href="Adminlogin.php" class="sidebar-link">
+  <a href="logout.php" class="sidebar-link">
       <i class="lni lni-exit"></i>
       <span>Logout</span>
     </a>
@@ -114,6 +123,7 @@
                     $stmt = $conn->prepare($deleteSql);
                     $stmt->bindParam(':id', $deleteId, PDO::PARAM_INT);
                     if ($stmt->execute()) {
+                      log_audit_trail("Delete Account", "Deleted Pharmacist Account ID: " .$deleteId, $logged_username,$role);
                         echo "<p>Lab User with ID $deleteId has been deleted.</p>";
                         header("Location: {$_SERVER['PHP_SELF']}");
                         exit;

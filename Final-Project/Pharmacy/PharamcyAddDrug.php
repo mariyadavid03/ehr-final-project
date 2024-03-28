@@ -2,6 +2,13 @@
   session_start();
   require_once ('../data/conn.php');
   require_once('../data/methods.php');
+  if(!isset($_SESSION['logged_username'])) {
+    header("Location: logout.php");
+    exit; 
+   } 
+  $logged_username = $_SESSION['logged_username'];
+  $role = $_SESSION['logged_role']; 
+  
   ob_start();
 ?>
 <!DOCTYPE html>
@@ -29,7 +36,7 @@
 <!--=============== CSS ===============-->
 <link rel="stylesheet" href="../Css/Modalpopup.css">
 <link rel="stylesheet" href="../Css/PharamacyAddDrug.css">
-
+<link rel="icon" type="imag/jpg" href="../Images/Icons/Dieabatecare.png">
 
 </head>
 
@@ -48,7 +55,7 @@
                     <a href="PharamacyInventory.php" class="nav_link"> <i class='bx bx-user nav_icon'></i> <span class="nav_name">Inventory</span> </a> 
                     <a href="PharamcyAddDrug.php" class="nav_link"> <i class='bx bx-message-square-detail nav_icon'></i> <span class="nav_name">Add Drugs</span> </a> 
                 </div>
-            </div> <a href="Pharmacy.php" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">Sign Out</span> </a>
+            </div> <a href="logout.php" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">Sign Out</span> </a>
         </nav>
     </div>
 
@@ -109,7 +116,10 @@
                 $sql = $conn->prepare("INSERT INTO `medicine`(`med_name`, `type`, `status`, `supplier_name`, `manu_date`, `exp_date`) 
                                         VALUES (:name, :type, :status, :supplier, :mfd, :exp)");
                 $sql->execute([':name'=> $name,':type'=>$type,'status'=>$status, ':supplier'=>$supplier,':mfd'=>$mfd,':exp'=> $exp]);
+                $medId = $conn->lastInsertId();
                 $_SESSION['prescription_confirmed_success'] = true;
+                
+                log_audit_trail("Drug Inventory Manage", "Added Drug with ID: " .$medId, $logged_username,$role);
                 echo '<div class="alert alert-success" style="position: fixed; top: 10%; left: 50%; transform: translate(-50%, -50%); z-index: 999;" role="alert">Drug successfully updated!</div>';
                 header("Refresh: 2; URL=PharamacyInventory.php");
                 ob_end_flush();

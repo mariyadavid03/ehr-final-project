@@ -1,8 +1,16 @@
 <?php
-  session_start();
-  require_once ('../data/conn.php');
-  require_once('../data/methods.php');
-  ob_start();
+    session_start();
+    require_once('../data/conn.php');
+    require_once ('../data/methods.php');
+    
+    if(!isset($_SESSION['logged_username'])) {
+      header("Location: logout.php");
+      exit; 
+     } 
+    $logged_username = $_SESSION['logged_username'];
+    $role = $_SESSION['logged_role']; 
+    ob_start();
+  
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,25 +24,26 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <link rel="stylesheet" href="../Css/AdminpanelManageUser.CSS">
+    <link rel="icon" type="imag/jpg" href="../Images/Icons/Dieabatecare.png">
 </head>
 
 <body>
     <div class="wrapper">
-      <aside id="sidebar">
-        <div class="d-flex">
-          <button class="toggle-btn" type="button">
-            <i class="lni lni-grid-alt"></i>
-          </button>
-          <div class="sidebar-logo">
-            <a href="#">Admin Panel</a>
-          </div>
-        </div>
-        <ul class="sidebar-nav">
-          <li class="sidebar-item">
-          <a href="../Admin/Admin .php" class="sidebar-link">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
-              <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z"/>
-            </svg>
+    <aside id="sidebar">
+  <div class="d-flex">
+    <button class="toggle-btn" type="button">
+      <i class="lni lni-grid-alt"></i>
+    </button>
+    <div class="sidebar-logo">
+      <a href="#">Admin Panel</a>
+    </div>
+  </div>
+  <ul class="sidebar-nav">
+    <li class="sidebar-item">
+    <a href="../Admin/Admin .php" class="sidebar-link">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
+  <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z"/>
+</svg>
         <span>Home</span>
       </a>
     </li>
@@ -46,10 +55,11 @@
         <span>Manage User</span>
       </a>
       <div class="collapse submenu" id="manageUserSubMenu" style="margin-left: 30px;">  
-        <a href="../Admin/AdminManageUserLab.php" class="sidebar-link"><span>Lab Technician</span></a>
+      <a href="../Admin/AdminManageUserLab.php" class="sidebar-link"><span>Lab Technician</span></a>
         <a href="../Admin/AdminManageUserPharmecy.php" class="sidebar-link"><span>Pharmacist</span></a>
         <a href="../Admin/AdminManageUserDoctor.php" class="sidebar-link"><span>Doctor</span></a>
         <a href="../Admin/AdminManageUserRec.php" class="sidebar-link"><span>Receptionist</span></a>
+        <a href="../Admin/AdminManageUserAdmin.php" class="sidebar-link"><span>Admin</span></a>
       </div>
     </li>
     <li class="sidebar-item">
@@ -73,7 +83,7 @@
     </li>
   </ul>
   <div class="sidebar-footer">
-    <a href="Adminlogin.php" class="sidebar-link">
+  <a href="logout.php" class="sidebar-link">
       <i class="lni lni-exit"></i>
       <span>Logout</span>
     </a>
@@ -117,6 +127,7 @@
                     $stmt = $conn->prepare($deleteSql);
                     $stmt->bindParam(':receptionist_id', $deleteId, PDO::PARAM_INT);
                     if ($stmt->execute()) {
+                      log_audit_trail("Delete Account", "Deleted Recptionist Account ID: " .$deleteId, $logged_username,$role);
                         echo "<p>Receptionist with ID $deleteId has been deleted.</p>";
                         header("Location: {$_SERVER['PHP_SELF']}");
                         exit;

@@ -1,5 +1,5 @@
 function sendOTP() {
-	const email = document.getElementById('email');// Get the email from the label and remove any leading/trailing whitespace
+	const email = document.getElementById('email');
 	const otpverify = document.getElementsByClassName('otpverify')[0];
 
 	let otp_val = Math.floor(Math.random() * 10000);

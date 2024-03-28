@@ -16,7 +16,8 @@
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
         <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.3/components/logins/login-3/assets/css/login-3.css">
-<link rel="stylesheet" href="../Css/Reciption.Css">        
+<link rel="stylesheet" href="../Css/Reciption.Css"> 
+<link rel="icon" type="imag/jpg" href="../Images/Icons/Dieabatecare.png">       
 <title>Lab Login</title>
 </head>
 <body>
@@ -80,10 +81,10 @@
                     $_SESSION['logged_username'] = $username;
                     $_SESSION['logged_role'] = $user['role']; 
 
-                    /*echo "ID: ". $_SESSION['logged_id'];
-                    echo "Usernmae: ".$_SESSION['logged_username'];
-                    echo "role: ".$_SESSION['logged_role'] ;*/
-
+                    $role = $_SESSION['logged_role'];
+                    $logged_username = $_SESSION['logged_username'];
+                    
+                    log_audit_trail("User Login", " - ", $logged_username,$role); 
                     header("Location: LabHome.php");
                     exit;
                   } else{

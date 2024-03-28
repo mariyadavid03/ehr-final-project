@@ -23,7 +23,7 @@
 <!-- Link Bootstrap JS (including Popper.js) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 
-
+<link rel="icon" type="imag/jpg" href="../Images/Icons/Dieabatecare.png">
 </head>
 <body>
 <header class="row py-3" style="background-color: dodgerblue;">

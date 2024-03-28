@@ -2,6 +2,11 @@
     session_start();
     require_once ('../data/conn.php');
 	require_once('../data/methods.php');
+
+    if(!isset($_SESSION['logged_username'])) {
+        header("Location: logout.php");
+        exit; 
+       }
 ?>    
 <!DOCTYPE html>
 <html lang="en">
@@ -28,7 +33,7 @@
 <!--=============== CSS ===============-->
 <link rel="stylesheet" href="../Css/Modalpopup.css">
 <link rel="stylesheet" href="../Css/ReciptionHome.css">
-
+<link rel="icon" type="imag/jpg" href="../Images/Icons/Dieabatecare.png">
 
 </head>
 
@@ -60,9 +65,6 @@
             echo 'Error connecting to database: ' . $e->getMessage();
             exit;
         }
-
-        
-
     } 
     else{
         echo '<p>You are not logged in.</p>';
@@ -78,16 +80,14 @@
         <nav class="nav">
             <div>
                 <div class="nav_list"> <a href="#" class="nav_link active"> <i class='bx bx-grid-alt nav_icon'></i> <span class="nav_name">Home</span> </a><a href="#" class="nav_link"></div>
-            </div> <a href="DoctorLogin.php" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">SignOut</span> </a>
+            </div> <a href="logout.php" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">SignOut</span> </a>
         </nav>
     </div>
+
+
     <!--Container Main start-->
     <div class="height-100 bg-light">
-       
     <br>
-
-
-   
         <div class="row mt-5">
         <div class="col-md-5 mx-auto">
         <form method="post">
@@ -95,8 +95,8 @@
                     <input class="form-control border-end-0 border" name="patientIDInput" type="search" placeholder="Search Patient" id="example-search-input">
                     <span class="input-group-append">
                     <button class="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border ms-n5" type="submit" name="btnSearch">
-                                        <i class="fa fa-search"></i>
-                        </button>
+                        <i class="fa fa-search"></i>
+                    </button>
                     </span>
                 </div>
             </form>
@@ -143,7 +143,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
-                        <h4>Patient List List</h4>
+                        <h4>Patient List</h4>
                             <div class="table-responsive">
                                 <table id="mytable" class="table table-bordred table-striped">
                                
@@ -157,22 +157,22 @@
                                     <tbody>
                 
                                     <?php if (empty($patients)) : ?>
-        <tr>
-            <td colspan="4">No results found.</td>
-        </tr>
-    <?php else : ?>
-        <?php foreach ($patients as $patient) : ?>
-            <tr style="background-color: <?php echo ($patient['category_id'] == 1) ? '#ffbbbb' : (($patient['category_id'] == 2) ? '#ffe0af' :(($patient['category_id'] == 3) ? '#e6ffea' : '')); ?>">
-                <td><?php echo $patient['phn']; ?></td>
-                <td><?php echo $patient['first_name'] . " " . $patient['last_name']; ?></td>
-                <td><?php echo $patient['diabetes_type']; ?></td>
-                <td>
-                    <input type="hidden" name="category" <?php echo $patient['category_id']; ?>>
-                    <button type="button" name="btnView" class="btn btn-primary btn-sm" onclick="viewPatient('<?php echo $patient['patient_id']; ?>')">View</button>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-    <?php endif; ?>
+                                        <tr>
+                                            <td colspan="4">No results found.</td>
+                                        </tr>
+                                    <?php else : ?>
+                                        <?php foreach ($patients as $patient) : ?>
+                                            <tr style="background-color: <?php echo ($patient['category_id'] == 1) ? '#ffbbbb' : (($patient['category_id'] == 2) ? '#ffe0af' :(($patient['category_id'] == 3) ? '#e6ffea' : '')); ?>">
+                                                <td><?php echo $patient['phn']; ?></td>
+                                                <td><?php echo $patient['first_name'] . " " . $patient['last_name']; ?></td>
+                                                <td><?php echo $patient['diabetes_type']; ?></td>
+                                                <td>
+                                                    <input type="hidden" name="category" <?php echo $patient['category_id']; ?>>
+                                                    <button type="button" name="btnView" class="btn btn-primary btn-sm" onclick="viewPatient('<?php echo $patient['patient_id']; ?>')">View</button>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
                       
                                     </tbody>
                      

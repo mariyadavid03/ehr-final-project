@@ -3,6 +3,12 @@
 	require_once ('../data/conn.php');
 	require_once('../data/methods.php');
 	$id = $_GET['id'];
+	if(!isset($_SESSION['logged_username'])) {
+		header("Location: logout.php");
+		exit; 
+	   } 
+	  $logged_username = $_SESSION['logged_username'];
+	  $role = $_SESSION['logged_role']; 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,6 +23,7 @@
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
         <link rel="stylesheet" href="../Css/AddUser.Css">
         <link rel="stylesheet" href="../Css/Adduserform.css">
+		<link rel="icon" type="imag/jpg" href="../Images/Icons/Dieabatecare.png">
 </head>
 
 <body>
@@ -119,6 +126,7 @@
 
 			try{
 				$conn = conn::getConnection();
+				
 
 				if (!empty($password)) {
 					$salt = random_bytes(22);
@@ -134,9 +142,9 @@
 							SET name = :name, contact = :contact, email = :email
 							WHERE user_id = :user_id");
 				$query1->execute([':name' => $name, ':contact' => $number, ':email'=> $email,':user_id' => $userId]);
+				log_audit_trail("Update Account", "Edited Admin User Account ID: " .$userId, $logged_username,$role);
 				header("Location: AdminManageUserAdmin.php");
 
-				//log_audit_trail("Update Account", "Edited user id " .$id. " account", $logged_username);
 
 
 

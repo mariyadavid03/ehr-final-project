@@ -29,6 +29,7 @@ ob_start();
 
 
         <link rel="stylesheet" href="../Css/AdminpanelManageUser.css">
+        <link rel="icon" type="imag/jpg" href="../Images/Icons/Dieabatecare.png">
 </head>
 
 <body>
@@ -59,10 +60,11 @@ ob_start();
         <span>Manage User</span>
       </a>
       <div class="collapse submenu" id="manageUserSubMenu" style="margin-left: 30px;">  
-        <a href="../Admin/AdminManageUserLab.php" class="sidebar-link"><span>LAB</span></a>
-        <a href="../Admin/AdminManageUserPharmecy.php" class="sidebar-link"><span>Pharmacy</span></a>
+      <a href="../Admin/AdminManageUserLab.php" class="sidebar-link"><span>Lab Technician</span></a>
+        <a href="../Admin/AdminManageUserPharmecy.php" class="sidebar-link"><span>Pharmacist</span></a>
         <a href="../Admin/AdminManageUserDoctor.php" class="sidebar-link"><span>Doctor</span></a>
         <a href="../Admin/AdminManageUserRec.php" class="sidebar-link"><span>Receptionist</span></a>
+        <a href="../Admin/AdminManageUserAdmin.php" class="sidebar-link"><span>Admin</span></a>
       </div>
     </li>
     <li class="sidebar-item">
@@ -86,7 +88,7 @@ ob_start();
     </li>
   </ul>
   <div class="sidebar-footer">
-    <a href="../Admin .html" class="sidebar-link">
+  <a href="logout.php" class="sidebar-link">
       <i class="lni lni-exit"></i>
       <span>Logout</span>
     </a>
@@ -117,7 +119,7 @@ ob_start();
                     // Search functionality
                     if (isset($_POST['btnSearch'])) {
                         $searchTerm = $_POST['search'];
-                        $sql1 = "SELECT  * FROM `audit_trail` WHERE `event_type` LIKE :searchTerm OR `description` LIKE :searchTerm OR `datetime` LIKE :searchTerm OR `username` LIKE :searchTerm";
+                        $sql1 = "SELECT  * FROM `audit_trail` WHERE `event_type` LIKE :searchTerm OR `description` LIKE :searchTerm OR `datetime` LIKE :searchTerm OR `username` LIKE :searchTerm OR `user_type` LIKE :searchTerm";
                         $conn = conn::getConnection();
                         $query1 = $conn->prepare($sql1);
                         $query1->execute([':searchTerm' => "%$searchTerm%"]);
@@ -148,6 +150,7 @@ ob_start();
                                <thead>
                                <th>Trail ID</th>
                                <th>Username</th>
+                               <th>Role</th>
                                <th>Event Type</th>
                                <th>Description</th>
                                <th>DateTime</th>
@@ -161,6 +164,7 @@ ob_start();
                                         <tr>
                                             <td><?php echo $trail['trail_id']; ?></td>
                                             <td><?php echo $trail['username']; ?></td>
+                                            <td><?php echo $trail['user_type']; ?></td>
                                             <td><?php echo $trail['event_type']; ?></td>
                                             <td><?php echo $trail['description']; ?></td>
                                             <td><?php echo $trail['datetime']; ?></td>

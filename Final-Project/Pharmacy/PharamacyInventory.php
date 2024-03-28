@@ -2,6 +2,15 @@
 session_start();
 require_once('../data/conn.php');
 require_once('../data/methods.php');
+
+if(!isset($_SESSION['logged_username'])) {
+  header("Location: logout.php");
+  exit; 
+ } 
+$logged_username = $_SESSION['logged_username'];
+$role = $_SESSION['logged_role']; 
+
+
 if(isset($_SESSION['drug_added_success']) && $_SESSION['drug_added_success'] == true) {
     echo '<div class="alert alert-success" role="alert">Drug successfully added!</div>';
     unset($_SESSION['drug_added_success']);
@@ -33,7 +42,7 @@ ob_start();
 <!--=============== CSS ===============-->
 <link rel="stylesheet" href="../Css/Modalpopup.css">
 <link rel="stylesheet" href="../Css/PharamacyInven.css">
-
+<link rel="icon" type="imag/jpg" href="../Images/Icons/Dieabatecare.png">
 
 </head>
 
@@ -82,7 +91,7 @@ ob_start();
                     <a href="PharamacyInventory.php" class="nav_link"> <i class='bx bx-user nav_icon'></i> <span class="nav_name">Inventory</span> </a> 
                     <a href="PharamcyAddDrug.php" class="nav_link"> <i class='bx bx-message-square-detail nav_icon'></i> <span class="nav_name">Add Drugs</span> </a> 
                 </div>
-            </div> <a href="Pharmacy.php" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">Sign Out</span> </a>
+            </div> <a href="logout.php" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">Sign Out</span> </a>
         </nav>
     </div>
     <!--Container Main start-->
@@ -180,6 +189,7 @@ ob_start();
 
                                         $_SESSION['prescription_confirmed_success'] = true;
                                         echo '<div class="alert alert-success" style="position: fixed; top: 10%; left: 50%; transform: translate(-50%, -50%); z-index: 999;" role="alert">Drug successfully updated!</div>';
+                                        log_audit_trail("Drug Inventory Manage", "Deleted Drug with ID: " .$delete_id, $logged_username,$role);
                                         header("Location: ".$_SERVER['PHP_SELF']);
                                         exit();
                                         ob_end_flush();
@@ -256,13 +266,12 @@ ob_start();
         $('.btn-danger').click(function(e){
             e.preventDefault();
             var delete_link = $(this).attr('href');
-            var delete_id = delete_link.split('=')[1]; // Get the value of delete_id parameter from the URL
+            var delete_id = delete_link.split('=')[1]; 
             if(confirm("Are you sure you want to delete this drug?")) {
                 $.ajax({
                     url: delete_link,
                     type: 'GET',
                     success: function(response){
-                        // Reload page
                         location.reload();
                         $('.alert').fadeIn().delay(3000).fadeOut();
                     },

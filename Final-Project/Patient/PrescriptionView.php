@@ -65,13 +65,12 @@ if (isset($_GET['presId'])) {
 </svg>
 </a>
 </header> 
-<div class="container" style="margin-top: -15px;">
-  <br>
+<div class="container" style="margin-top: -15px;width: auto;">
   <br>
   <br>
   
     <div class="row" >
-        <H2 style="-webkit-text-stroke: 1px black; color:white">Prescribed Medicine</H2>
+        <H2 style="-webkit-text-stroke: 1px black; color:black;margin-bottom:20px;">Prescribed Medicine</H2>
     </div>
     <div class="bg-white"  style=" box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;border: 1px solid #41A5EE;">
 

@@ -6,6 +6,8 @@
     if (isset($_SESSION['logged_username'])) {
         $username = $_SESSION['logged_username'];
         $user_id = $_SESSION['logged_id'];
+        $role = $_SESSION['logged_role']; 
+        
 
         try {
             $conn = conn::getConnection();
@@ -57,7 +59,7 @@
 <!--=============== CSS ===============-->
 <link rel="stylesheet" href="../Css/Modalpopup.css">
 <link rel="stylesheet" href="../Css/LabHome.css">
-
+<link rel="icon" type="imag/jpg" href="../Images/Icons/Dieabatecare.png">
 
 </head>
 
@@ -76,7 +78,7 @@
                     <a href="LabPastTests.php" class="nav_link"> <i class='bx bx-user nav_icon'></i> <span class="nav_name">Past Lab Tests</span> </a> 
 
                 </div>
-            </div> <a href="LabLogin.php" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">SignOut</span> </a>
+            </div> <a href="logout.php" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">SignOut</span> </a>
         </nav>
     </div>
     <!--Container Main start-->

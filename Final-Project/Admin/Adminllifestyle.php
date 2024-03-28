@@ -1,7 +1,13 @@
 <?php
   session_start();
-  require_once ('../data/conn.php');
-	require_once('../data/methods.php');
+  require_once('../data/conn.php');
+  require_once ('../data/methods.php');
+  if(!isset($_SESSION['logged_username'])) {
+    header("Location: logout.php");
+    exit; 
+   } 
+  $logged_username = $_SESSION['logged_username'];
+	$role = $_SESSION['logged_role']; 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,40 +21,42 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <link rel="stylesheet" href="../Css/AdminpanelManageUser.css">
+    <link rel="icon" type="imag/jpg" href="../Images/Icons/Dieabatecare.png">
 </head>
 
 <body>
     <div class="wrapper">
-      <aside id="sidebar">
-        <div class="d-flex">
-          <button class="toggle-btn" type="button">
-            <i class="lni lni-grid-alt"></i>
-          </button>
-          <div class="sidebar-logo">
-            <a href="#">Admin Panel</a>
-          </div>
-        </div>
-        <ul class="sidebar-nav">
-          <li class="sidebar-item">
-          <a href="../Admin/Admin .php" class="sidebar-link">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
-              <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z"/>
-            </svg>
-            <span>Home</span>
-          </a>
-        </li>
-        <li class="sidebar-item">
-          <a href="#" data-bs-toggle="collapse" data-bs-target="#manageUserSubMenu" class="sidebar-link">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill-gear" viewBox="0 0 16 16">
-            <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4m9.886-3.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0"/>
-          </svg>
+    <aside id="sidebar">
+  <div class="d-flex">
+    <button class="toggle-btn" type="button">
+      <i class="lni lni-grid-alt"></i>
+    </button>
+    <div class="sidebar-logo">
+      <a href="#">Admin Panel</a>
+    </div>
+  </div>
+  <ul class="sidebar-nav">
+    <li class="sidebar-item">
+    <a href="../Admin/Admin .php" class="sidebar-link">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
+  <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z"/>
+</svg>
+        <span>Home</span>
+      </a>
+    </li>
+    <li class="sidebar-item">
+      <a href="#" data-bs-toggle="collapse" data-bs-target="#manageUserSubMenu" class="sidebar-link">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill-gear" viewBox="0 0 16 16">
+  <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4m9.886-3.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0"/>
+</svg>
         <span>Manage User</span>
       </a>
       <div class="collapse submenu" id="manageUserSubMenu" style="margin-left: 30px;">  
-        <a href="../Admin/AdminManageUserLab.php" class="sidebar-link"><span>LAB</span></a>
-        <a href="../Admin/AdminManageUserPharmecy.php" class="sidebar-link"><span>Pharmacy</span></a>
+      <a href="../Admin/AdminManageUserLab.php" class="sidebar-link"><span>Lab Technician</span></a>
+        <a href="../Admin/AdminManageUserPharmecy.php" class="sidebar-link"><span>Pharmacist</span></a>
         <a href="../Admin/AdminManageUserDoctor.php" class="sidebar-link"><span>Doctor</span></a>
         <a href="../Admin/AdminManageUserRec.php" class="sidebar-link"><span>Receptionist</span></a>
+        <a href="../Admin/AdminManageUserAdmin.php" class="sidebar-link"><span>Admin</span></a>
       </div>
     </li>
     <li class="sidebar-item">
@@ -72,7 +80,7 @@
     </li>
   </ul>
   <div class="sidebar-footer">
-    <a href="../Admin .html" class="sidebar-link">
+  <a href="logout.php" class="sidebar-link">
       <i class="lni lni-exit"></i>
       <span>Logout</span>
     </a>
@@ -146,6 +154,7 @@
                     $eplanQuery->execute([':eplanId'=> 3, ':activity_id'=> $activityId]);
 
                   } 
+                  log_audit_trail("Manage Lifestyle Plan", "Added Activity ID: ".$activityId." to " .$category, $logged_username,$role); 
                   $_SESSION['success_message'] = "Successfully added.";
 
                 } catch(Exception $e){
@@ -380,11 +389,19 @@
 
                     $deleteQuery1->execute([':activity_id' => $activity_id]);
                     $deleteQuery2->execute([':activity_id' => $activity_id]);
+                    $_SESSION['success_message'] = "Successfully deleted.";
+                    log_audit_trail("Manage Lifestyle Plan", "Delete Activity ID: ".$activityId, $logged_username,$role); 
 
                   } catch (Exception $e){
                     echo "ERROR: ".$e->getMessage();
                   }
-                } 
+                }
+                if(isset($_SESSION['success_message'])) {
+                  echo '<div id="successMessage" class="alert alert-success" role="alert">
+                          ' . $_SESSION['success_message'] . '
+                        </div>';
+                  unset($_SESSION['success_message']);
+                }  
               ?>
 
               <!--JS-->

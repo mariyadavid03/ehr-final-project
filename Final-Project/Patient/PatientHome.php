@@ -3,6 +3,14 @@
     require_once ('../data/conn.php');
     require_once('../data/methods.php');
 
+    if(!isset($_SESSION['logged_username'])) {
+        header("Location: logout.php");
+        exit; 
+       } 
+      $logged_username = $_SESSION['logged_username'];
+      $role = $_SESSION['logged_role']; 
+
+
     if (isset($_SESSION['logged_username'])) {
         $username = $_SESSION['logged_username'];
         $user_id = $_SESSION['logged_id'];
@@ -26,11 +34,6 @@
             echo 'Error connecting to database: ' . $e->getMessage();
             exit;
         }
-
-        /*echo $patient_id;
-        echo $name;
-        echo $user_id;
-        echo $username;*/
     }
 ?>
 <!DOCTYPE html>
@@ -61,7 +64,7 @@
 
 </head>
 
-<body id="body-pd" style="background-image:url(../Images/images/bg2.jpg); background-size: 100% auto; "> 
+<body id="body-pd" style="background-image:url(../Images/images/bg23.jpg); background-size: 100% auto; "> 
 <header class="header" id="header" style="background-color: #F0F1F3;">
     <div class="header_toggle"><i class='bx bx-menu' id="header-toggle"></i></div>
 </header>
@@ -75,7 +78,7 @@
                     <a href="Labresult.php" class="nav_link"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-pulse" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M10 1.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5zm-5 0A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5v1A1.5 1.5 0 0 1 9.5 4h-3A1.5 1.5 0 0 1 5 2.5zm-2 0h1v1H3a1 1 0 0 0-1 1V14a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V3.5a1 1 0 0 0-1-1h-1v-1h1a2 2 0 0 1 2 2V14a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3.5a2 2 0 0 1 2-2m6.979 3.856a.5.5 0 0 0-.968.04L7.92 10.49l-.94-3.135a.5.5 0 0 0-.895-.133L4.232 10H3.5a.5.5 0 0 0 0 1h1a.5.5 0 0 0 .416-.223l1.41-2.115 1.195 3.982a.5.5 0 0 0 .968-.04L9.58 7.51l.94 3.135A.5.5 0 0 0 11 11h1.5a.5.5 0 0 0 0-1h-1.128z"/></svg><span class="nav_name">Lab Results</span> </a> 
                     <a href="Lifestyleplan.php" class="nav_link"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/></svg><span class="nav_name">Life Style Plan</span> </a> <a href="#" class="nav_link"></div>
             </div> 
-                    <a href="PatientLogin.php" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">SignOut</span> </a>
+                    <a href="logout.php" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">SignOut</span> </a>
                    
         </nav>
     </div>
@@ -106,10 +109,10 @@
                 <br>
                 <div class="row d-flex " style="text-align: left;">
                     <div class="col mx-4">
-                    <H6 style="color: black;"><img src="../Images/Icons/glucosemeter_4333055.png"><b>Glucose</b></H6>
-                    <H6 style="color: black;"><img src="../Images/Icons/glucometer_8852600.png"><b>BP Diastolic</b></H6>
-                    <H6 style="color: black;"><img src="../Images/Icons/heartrate.png"><b>Heart Rate</b></H6>
-                    <H6 style="color: black;"><img src="../Images/Icons/glucometer_8852600.png"><b>BP Systolic</b></H6>
+                    <H6 style="color: black;"><img src="../Images/Icons/glucosemeter_4333055.png"><b>  Glucose</b></H6>
+                    <H6 style="color: black;"><img src="../Images/Icons/glucometer_8852600.png"><b>  BP Diastolic</b></H6>
+                    <H6 style="color: black;"><img src="../Images/Icons/heartrate.png"><b>  Heart Rate</b></H6>
+                    <H6 style="color: black;"><img src="../Images/Icons/glucometer_8852600.png"><b>  BP Systolic</b></H6>
                     </div>
                     <div class="col" style="text-align: left; margin-left:-30px">
                     <H6><?php echo $vitals['glucose_level'] ?></H6>
@@ -133,7 +136,7 @@
         
     <div class="container">
     <div class="row" style="margin-left: 11px;">
-        <H2 style="-webkit-text-stroke: 1px black; color:white">Home</H2>
+        <H2 style="-webkit-text-stroke: 1px black; color:black;margin-top: 15px;margin-bottom:15px">Home</H2>
         </div>
     <!--first row-->
 
@@ -198,16 +201,6 @@
                         <div>
                     <a href="PatientProfile.php?patientId=<?php echo $patient_id; ?>" class="btn btn-danger btn-sm" style="background-color:red" >View</a>
                         </div>
-                        <!-- <div>
-                        <a href="https://www.example.com">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="30" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16" width="24" height="24">
-                          
-                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
-                            
-                        </svg>
-                        </a>
-                        </div> -->
 
                     </div>  
                 
@@ -448,16 +441,16 @@
         width: auto;
         height: 15px;
     }
-    @media (max-width: 767px) { /* Target screens smaller than 768px (sm breakpoint) */
-    .col-md-6{  /* Target the outer col-md-6 element */
-      flex-direction: column; /* Stack the divs vertically on mobile */
+    @media (max-width: 767px) { 
+    .col-md-6{  
+      flex-direction: column; 
     }
     .col-md-5 {
-    margin-left: 0px;  /* Remove margin-left on mobile devices */
+    margin-left: 0px; 
     }
     .col-md-5 {
-    margin-left: 0px;  /* Remove left margin for better centering */
-    margin-right: 0px; /* Remove right margin */
+    margin-left: 0px; 
+    margin-right: 0px; 
     }
     .container {
     margin-left: -1.5rem;
