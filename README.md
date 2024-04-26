@@ -47,8 +47,8 @@ Start from Login pages
 ## Acknowledgments
 This project is a collabarative effort of following individuals.
 
-- @github/mariyadavid03 : Project Manager, Backend Developer, Database Engineer. Documenter
-- @github/Pethumshyam6611 : UI/UX Designer, Frontend Developer, Documenter
+- Chethana David : Project Manager, Backend Developer, Database Engineer. Documenter
+- Pethum Shaym: UI/UX Designer, Frontend Developer, Documenter
 - Nimasha Bandara: Quality Assurace Officer, Documenter
 - Janani Kodithuwakku: Quality Assurace Officer, Documenter
 - Sakuni Weerasingher: Quality Assurace Officer, Documenter
