@@ -19,7 +19,7 @@ Database: MongoDB
 Frontend Framework: CSS, Bootstrap
 
 ## Installation
-Clone the repository: git clone https://github.com/yourusername/ehr-project.git
+Clone the repository
 
 Navigate to the project directory and locate "ehr_db"
 
@@ -47,10 +47,10 @@ Start from Login pages
 ## Acknowledgments
 This project is a collabarative effort of following individuals.
 
-@mariyadavid03 : Project Manager, Backend Developer, Database Engineer. Documenter
-@pethumshyam6611 : UI/UX Designer, Frontend Developer, Documenter
-Nimasha Bandara: Quality Assurace Officer, Documenter
-Janani Kodithuwakku: Quality Assurace Officer, Documenter
-Sakuni Weerasingher: Quality Assurace Officer, Documenter
+- @github/mariyadavid03 : Project Manager, Backend Developer, Database Engineer. Documenter
+- @github/Pethumshyam6611 : UI/UX Designer, Frontend Developer, Documenter
+- Nimasha Bandara: Quality Assurace Officer, Documenter
+- Janani Kodithuwakku: Quality Assurace Officer, Documenter
+- Sakuni Weerasingher: Quality Assurace Officer, Documenter
 
 Special thanks to all the lecturers at ICBT Kandy for their invaluable support and guidance throughout the project.
