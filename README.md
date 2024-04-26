@@ -1,4 +1,5 @@
 EHR for Diabetic Care
+
 This project is an Electronic Health Record (EHR) system designed specifically for Sri Lankan National Diabetic care. 
 This aims to provide a comprehensive platform for healthcare providers and patients to efficiently manage records and improve the quality of care.
 In this system there are main 6 users as Doctor, Patient, Lab-Technician, Pharmacist, Reciptionist and Admin. 
