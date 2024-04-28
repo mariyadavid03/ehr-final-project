@@ -14,43 +14,65 @@ In this system there are main 6 users as Doctor, Patient, Lab-Technician, Pharma
 ## Technologies Used
 Backend Development: PHP, JavaScript
 
-Database: MongoDB
+Database: SQL
 
-Frontend Framework: CSS, Bootstrap
+Server: XAMPP
+
+Frontend Framework: CSS, Bootstrap,
 
 ## Installation
 Clone the repository
 
-Navigate to the project directory and locate "ehr_db"
+Navigate to the project directory and locate "ehr_db.sql" file
 
-Export database
+Export database (Recommend using phpmyadmin's SQL Server)
 
-Initilize proper connection according to "conn.php"
+Initialize proper connection according to "conn.php"
+(File path: ehr-final-project -> Final-Project -> data -> conn.php)
 
-Start from Login pages
+Start from preferred login pages using respective sample credentials given in "Login-Info.txt" file
+(File Path: ehr-final-project -> Login-Info.txt)
 
 ## Usage
 ### Admin 
 - Create and manage staff user accounts
-- Manage dietary and activity reccomendation plans
-- View system aduit trails
+- Manage dietary and activity recommendations plans
+- View system audit trails
 
 ### Doctor
-- Search for patient using Patient Health Number(PHN)
+- Search for a patient using a Patient Health Number(PHN)
 - Color-coded risk visualization
 - Enter visit records
-- Auto-generated charts according to Vital Signs
-- Request Lab Test
-- Place Prescriptions
+- View auto-generated charts according to Vital Signs
+- Request lab test
+- Place prescriptions
 
+### Receptionist 
+- Search for a patient using a Patient Health Number(PHN)
+- Register a new patient
+
+### Lab-Technician
+- View and search for requested lab tests
+- Enter result values
+- View past lab tests and results
+  
+### Pharmacist
+- View and search for placed prescriptions
+- Confirm a prescription's status
+- Manage Inventory
+- Change the Unavailiablty of a medicine
+
+## Patient
+- View patient details, visit records, prescriptions and lab tests
+- Access risk-tailored activity and diet plans
 
 ## Acknowledgments
-This project is a collabarative effort of following individuals.
+This project is a collaborative effort of the following individuals.
 
-- Chethana David : Project Manager, Backend Developer, Database Engineer. Documenter
+- Chethana David: Project Manager, Backend Developer, Database Engineer. Documenter
 - Pethum Shaym: UI/UX Designer, Frontend Developer, Documenter
-- Nimasha Bandara: Quality Assurace Officer, Documenter
-- Janani Kodithuwakku: Quality Assurace Officer, Documenter
-- Sakuni Weerasingher: Quality Assurace Officer, Documenter
+- Nimasha Bandara: Quality Assurance Officer, Documenter
+- Janani Kodithuwakku: Quality Assurance Officer, Documenter
+- Sakuni Weerasingher: Quality Assurance Officer, Documenter
 
 Special thanks to all the lecturers at ICBT Kandy for their invaluable support and guidance throughout the project.
